@@ -83,6 +83,8 @@ jQuery(document).ready(function(){
         jQuery.each(data, function(index, obj) { 
           jQuery('#result-query-users .span16').append('<div style="float:left; padding-left:15px;border:1px solid #888;padding:5px;margin:5px;"><a href="" onclick="zoomuser('+ obj.x +','+ obj.y +');return false;"> '+ obj.name + ' </a></div>');    
         });          
+      } else {
+        jQuery('#result-query-users').html('');
       }
     });  
   });  
