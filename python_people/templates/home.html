@@ -2,22 +2,27 @@
 {% block header %}
 <div class="jumbotron masthead" id="map_canvas" style="margin-top:10px; width:100%; height:300px;"></div>
 {% endblock %}
+{% block contenttitle %}{% endblock %}
 {% block content %}
 <section id="search">
+  <div class="page-header" style="margin-top:5px">
   <h3>Find Python developers near you 
     <g:plusone></g:plusone> 
     <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="pythonpeople">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
   </h3>
+  </div>
   <div class="row">
-    <form class="pull-left" action="">
-    <input type="text" id="address" placeholder="Search">
-    
-    <input type="button" value="search" onclick="codeAddress(map);">
-    </form>
+    <div class="span16">
+      <form class="pull-left" action="">
+      <input type="text" id="address" placeholder="Search">
+      
+      <input type="button" value="search" onclick="codeAddress(map);">
+      </form>
+    </div>
   </div>
 </section>
 <section>  
-  <div id="result-query-users" class="row"></div>
+  <div id="result-query-users"></div>
 </section>
 <section id="dashboard">
   <div class="page-header">
@@ -73,8 +78,12 @@ jQuery(document).ready(function(){
     s = 'people/list/bounded/' + s[0].lat() + '/'+ s[0].lng() + '/'+ s[1].lat()  + '/'+ s[1].lng() + '/';
     divs=[];
     jQuery.get(s, function(data) {
-      jQuery('#result-query-users').html(' <div class="page-header"><h3>Users on this region </h3></div>');
-      jQuery.each(data, function(index, obj) { jQuery('#result-query-users').append('<div style="float:left; padding-left:15px;border:1px solid #888;padding:5px;margin:5px;"><a href="" onclick="zoomuser('+ obj.x +','+ obj.y +');return false;"> '+ obj.name + ' </a></div>');    });  
+      if(data.length){
+        jQuery('#result-query-users').html('<div class="page-header"><h3>Users on this region </h3></div><div class="row"><div class="span16"></div></div>');
+        jQuery.each(data, function(index, obj) { 
+          jQuery('#result-query-users .span16').append('<div style="float:left; padding-left:15px;border:1px solid #888;padding:5px;margin:5px;"><a href="" onclick="zoomuser('+ obj.x +','+ obj.y +');return false;"> '+ obj.name + ' </a></div>');    
+        });          
+      }
     });  
   });  
   google.load('visualization', '1.0', {'packages':['corechart']});

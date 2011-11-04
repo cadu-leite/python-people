@@ -94,9 +94,11 @@
   
   <div class="container">
     <div class="content">
+      {% block contenttitle %}
       <div class="page-header">
         <h1>{%  block pagetitle %}{% endblock %}<small>{%  block pagesubtitle %}{% endblock %}</small></h1>
       </div>
+      {% endblock %}
       <div class="row"> 
         {% block content%}
         {% endblock %}
@@ -136,7 +138,6 @@ jQuery( function(){
 });
 </script>
 
-</script>
 {% block js %}
 {% endblock %}
 </html>
