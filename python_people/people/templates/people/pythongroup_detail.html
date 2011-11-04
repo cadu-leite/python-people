@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block js %} 
+{{ form.media }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/map_functions.min.js"></script> 
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript"> 
+var geocoder;
+var map;
+var marker=null;
+function init_mapa() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng({{object.point.get_x}}, {{object.point.get_y}});
+    var myOptions = {zoom: 4, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    marker = new google.maps.Marker({ map: map,position: map.getCenter(), draggable:true});
+    marker.setPosition(latlng);
+    setZoomToLatLng(map, latlng,6);
+};
+                                  
+jQuery(document).ready(function(){
+    init_mapa();
+    });
+</script> 
+{% endblock %}
+{% block pagetitle %}{% firstof object.name "--" %} {% endblock %}{% block pagesubtitle %}  This group was added by  {% firstof object.user.name "--" %} {% endblock %}
+{% block content %}
+<div class="row">
+<div class="span5">
+
+      <dl>
+        <dt>about </dt>
+        <dd>{% firstof object.description "--" %}</dd>
+        <dt>site</dt>
+        <dd> {% firstof object.site_url "--" %}</dd>
+        <dt>Contact </dt>
+        <dd> {{ object.contact }} </dd>
+
+        
+      </dl>
+    </div>
+<div class="span5">
+<div id="map_canvas" style="float:left;width:400px;height:350px;border:5px solid #ccc;margin:auto;top:20px;"></div>
+</div>
+</div>
+ 
+{% endblock %}

@@ -1,0 +1,8 @@
+{{ field.label_tag }} 
+<div class="input" id="field_{{ field.name }}">
+    {% if field.field.required or required %}<span class="required" title="Obrigatório">*</span>{% endif %}
+    {{ field }} {{ additional_text }}
+{% if field.help_text %}<div class="clearfix help-block">{{ field.help_text }}</div>{% endif %}
+{% if field.errors %}<div class="clearfix error">{{ field.errors|join:", " }}</div>{% endif %}
+</div>
+    

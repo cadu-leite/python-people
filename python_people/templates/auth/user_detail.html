@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block js %} 
+{{ form.media }}
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript"> 
+var geocoder;
+var map;
+var marker=null;
+function init_mapa() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng({{object.get_profile.point.get_x}}, {{object.get_profile.point.get_y}});
+    var myOptions = {zoom: 8, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    marker = new google.maps.Marker({ map: map,position: map.getCenter(), draggable:true});
+    marker.setPosition(latlng);
+    setZoomToLatLng(map, latlng,6);
+};
+                                  
+jQuery(document).ready(function(){
+    init_mapa();
+    });
+</script> 
+{% endblock %}
+{% block menu %}  
+
+ {% endblock %}
+{% block pagetitle %}User: {% firstof object.get_profile.name "--" %} {% endblock %}{% block pagesubtitle %} {% endblock %}
+{% block content %}
+<div class="row">
+  <div class="span5">
+    <dl>
+      <dt>Gender</dt>
+      <dd> {% firstof object.get_profile.get_gender_display "--" %}</dd>
+      <dt>Location</dt>
+      <dd>{% firstof object.get_profile.administrative_area_level_1 "--" %} -  {% firstof object.country "--" %}</dd>
+      <dt>Python Frameworks </dt>
+      <dd>{{ object.get_profile.python_frameworks.all|join:"," }} </dd>
+      <dt>Bio</dt>
+      <dd><p>{{ object.get_profile.bio }}</p> </dd>
+    </dl>
+  </div>
+  <div class="span5">
+  <div id="map_canvas" style="width:400px;height:350px;border:5px solid #ccc;margin:auto;top:20px;"></div>
+  </div>
+</div>
+ 
+{% endblock %}

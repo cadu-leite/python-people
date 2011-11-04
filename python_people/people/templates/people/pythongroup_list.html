@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block css %}
+{% endblock %}
+{% block js %} 
+{% endblock %}
+{% block menu %}  
+
+ {% endblock %}
+ {% block pagetitle %}  Python User Groups{% endblock %}{% block pagesubtitle %}&nbsp;&nbsp;<a class=" btn info " href="{% url python-group-crud %}">Add a new Python User Group </a> {% endblock %}
+
+{% block content %}
+
+<section id="python-groups">
+
+     {% for obj in object_list %}
+     <div class="user-item">
+         <div class="user-name"><a href="{% url python-group-detail obj.id %}">  {{ obj.name|default_if_none:"- -" }}  </a>  <span class="discreet">Location: <b>{{ obj.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.country|default_if_none:" - -" }}</b></span></div>
+     </div> 
+
+    {% endfor %}
+        
+</section>
+
+ 
+{% endblock %}

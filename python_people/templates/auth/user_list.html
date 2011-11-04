@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load gravatar %}
+{% block css %}
+{% endblock %}
+{% block js %} 
+{{ form.media }}
+<script type="text/javascript">
+    
+</script>
+{% endblock %}
+{% block pagetitle %}  Python Users {% endblock %}
+
+{% block content %}
+<section id="user-list">
+     {% for obj in object_list %}
+     <div class="user-item">
+         <a href="{% url python-user-profile obj.id %}"> {% gravatar obj.username 50 %} </a>
+         <div class="user-name"><a href="{% url python-user-profile obj.id %}">  {{ obj.get_profile.name|default_if_none:"- -" }}  </a>  <span class="discreet">Location: <b>{{ obj.get_profile.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.get_profile.country|default_if_none:" - -" }}</b></span></div>
+         <div class="user-bio"> <ul>{% for pf in  obj.get_profile.python_frameworks.all %} <li>{{ pf.name }}</li>  {% endfor %}<ul></div>
+     </div> 
+    {% endfor %}
+</div>
+</section>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load bootstrap_tags %}
+{% block js %} 
+{{ form.media }}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/map_functions.min.js"></script> 
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript"> 
+var geocoder;
+var map;
+var marker=null;
+function init_mapa() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-20, -48);
+    var myOptions = {zoom: 4, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    marker = new google.maps.Marker({ map: map,position: map.getCenter(), draggable:true});
+    
+    if (document.getElementById("id_point").value!=''){
+        latLng = wktToGoogleLanLng(document.getElementById("id_point").value);
+        marker.setPosition(latLng);
+        setZoomToLatLng(map, latLng, 15)
+    }
+    
+    google.maps.event.addListener(marker, 'dragend', function(mEvent) {reverseGeo(mEvent.latLng); });
+    google.maps.event.addListener(map, 'click', function(mEvent) {reverseGeo(mEvent.latLng);});
+
+};
+                                
+function reverseGeo(latLng){
+    marker.setPosition(latLng);
+    document.getElementById("id_point").value =  "POINT (" +  latLng.lat() + " " + latLng.lng() + ")"
+    var html="<ul>"
+    geocoder.geocode({latLng: latLng}, function(results, status) {
+        //alert(status);
+        if (status == google.maps.GeocoderStatus.OK) { 
+            components = results[0].address_components;
+            for (var i = 0; i < components.length; i++) {
+                short_name =  components[i].short_name ; 
+                type =  components[i].types[0];
+                long_name =  components[i].long_name;
+                if (document.getElementById("id_"+type)){
+                    document.getElementById("id_"
+           +type).value = short_name;
+                };
+            };
+        }else{
+            document.getElementById('id_locality').value = '';
+            document.getElementById('id_country').value = '';
+            document.getElementById('id_administrative_area_level_1').value = '';
+        }
+    });  
+ };
+
+
+function codeAddress() {
+    var address = document.getElementById("address").value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        latLng = results[0].geometry.location;
+        reverseGeo(latLng);
+        setZoomToLatLng(map,latLng)
+        document.getElementById("id_point").value =  "POINT (" +  latLng.lat() + " " + latLng.lng() + ")"; //wkt format
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+};
+  
+jQuery(document).ready(function(){
+    init_mapa();
+    jQuery('#id_country').width(50);
+    jQuery('#id_country').attr("readonly", true); 
+    
+    jQuery('#id_administrative_area_level_1').attr("readonly", true); 
+    jQuery('#id_locality').attr("readonly",true); 
+    jQuery('.input ul').attr("class","inputs-list");
+    });
+</script> 
+{% endblock %}
+{% block menu %}  
+
+ {% endblock %}
+{% block content %}
+<section>
+<div class="row">
+
+<div class="span8">
+    <form method="post">
+        <fieldset>
+            <legend>Profile Form</legend>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        </fieldset>
+        <div class="actions"><button type="submit" class="btn primary"> Enviar</button>
+        <button type="reset" class="btn "> Reset</button></div>
+    </form>
+</div>
+
+<div class="span8">
+   <div class="clearfix">
+    <label>find an address (Cidade, estado ou CEP): </label>
+    <input id="address" type="textbox" value=""> 
+    <input type="button" value="Localizar" onclick="codeAddress()">
+    </div>
+    <div id="map_canvas" style="width:100%;height:350px;border:5px solid #ccc;margin:auto;top:20px;"></div>
+</div>
+</div>
+</section> 
+ 
+{% endblock %}

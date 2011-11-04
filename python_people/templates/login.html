@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load bootstrap_tags %}
+{% block css %}
+{% endblock %}
+
+{% block content_title %}<h1>Acesso ao Sistema</h1>{% endblock %}
+
+{% block content %}
+<div class="login" style="margin:auto;margin-top:60px;width:400px; ">
+ <form method="post" action="{% if next %}?next={{ next }}{% endif %}">
+     {% csrf_token %}
+    <fieldset class="ui-widget ui-widget-content ui-corner-all">
+        <div class="fields">
+           
+                {% if form.errors %}
+
+                        <span class="error">Usuário ou senha incorretos!</span>
+
+                {% endif %}
+
+                {% bootstrap_form form %}
+
+                    <div class="submit-row">
+                        <input type="submit" aria-disabled="false" role="button" class="ui-button ui-widget ui-state-default ui-state-focus ui-corner-all ui-button-text ui-button-text-only" value="Submit" />
+                    </div>
+
+        </div>
+    </fieldset>
+</form>
+
+
+
+<div class="ui-widget ui-widget-content ui-corner-all" style="position: relative; width: 370px; height: 50px;  top: 30px; padding: 10px;">
+<div style="background: none repeat scroll 0% 0% transparent; border: 0pt none;" class="ui-dialog-content ui-widget-content">
+<p>Se você ainda não possui uma senha    <a href="{% url user-register %}">Registre-se</a></p>
+</div>
+</div>
+<div class="ui-widget ui-widget-content ui-corner-all" style="position: relative; width: 370px; height: 50px;  top: 30px; padding: 10px;">
+<div style="background: none repeat scroll 0% 0% transparent; border: 0pt none;" class="ui-dialog-content ui-widget-content">
+<p>esqueceu sua senha ?    <a href="{% url password-reset %}">Reset password</a></p> 
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load bootstrap_tags %}
+{% block js %} 
+{{ form.media }}
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+
+{% endblock %}
+{% block menu %}  
+
+ {% endblock %}
+{% block content %}
+<div class="row">
+<div class="span5">
+    <h3>    Please fill the form to register.</h3>
+    <p>Use your e-mail address as username</p>
+    
+    
+    </div>
+<div class="span7">
+
+    <form method="post">
+        <fieldset>
+        {% csrf_token %}
+        {% if  form.errors %}
+        <div class="alert-message error">
+            <a href="#" class="close">×</a>
+        <p><strong>Ooops!</strong> Please, verity the data entered.</p>
+      </div>
+        {% endif %}
+       {% bootstrap_form form %}
+       
+    
+        <div class="actions">
+            <button type="submit" class="btn primary "> Enviar</button>
+            <button type="reset" class="btn  "> Reset</button>
+        </div>
+        </fieldset>
+    </form>
+
+</div>
+</div>
+ 
+{% endblock %}

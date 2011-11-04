@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block header %}
+<div class="jumbotron masthead" id="map_canvas" style="margin-top:10px; width:100%; height:300px;"></div>
+{% endblock %}
+{% block content %}
+<section id="search">
+  <h3>Find Python developers near you 
+    <g:plusone></g:plusone> 
+    <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="pythonpeople">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+  </h3>
+  <div class="row">
+    <form class="pull-left" action="">
+    <input type="text" id="address" placeholder="Search">
+    
+    <input type="button" value="search" onclick="codeAddress(map);">
+    </form>
+  </div>
+</section>
+<section>  
+  <div id="result-query-users" class="row"></div>
+</section>
+<section id="dashboard">
+  <div class="page-header">
+      <h3>Latest additions </h3>
+  </div>
+  <div class="row">
+    <div class="span-one-third">
+        <h3>New Developers / Users</h3>
+        <ol>
+        {% for user in users %}
+        <li><a href="{% url python-user-profile  user.id %}">{{user.get_profile.name}}</a>  <span class="discreet"> ( {{user.date_joined|date:"D d M Y"}} ) </span></li>
+        {% endfor %}
+        </ol>
+    </div>
+    <div class="span-one-third">
+        <h3>New Groups</h3>
+        <ol>
+        {% for pyg in pygs %}
+        <li>{{pyg.name}}  <span class="discreet"> ( {{pyg.date_add|date:"D d M Y"}} ) </span></li>
+        {% endfor %}
+        </ol>
+    </div>    
+    <div class="span-one-third">
+      <h3>Some Graphs</h3>
+      <div id="chart_fw"></div>
+      <div id="chart_gd"></div>
+    </div>
+  </div><!-- /row -->
+</section>
+
+{% endblock %}
+
+{% block js %}
+<script language="javascript" type="text/javascript" src="{{ STATIC_URL }}js/map_functions.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/javascript"> 
+var latlng = new google.maps.LatLng(-20, -48);
+var myOptions = {zoom: 4,center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP }
+var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+var static_path = "{{ STATIC_URL }}";
+var frameworks_count={{ frameworks_count|safe }}; 
+var gender_counts = {{ gender_count|safe }};
+
+jQuery(document).ready(function(){
+  var points = {{ pjson|safe }};
+  var pygs = {{ pygsjson|safe }};
+  jQuery('#address').attr('placeholder','username');
+  init_mapa(map, points, pygs);});
+  google.maps.event.addListener(map, 'bounds_changed', function() {
+    //jQuery("#result-query-users").html("");
+    s = getMapBBox(map);
+    s = 'people/list/bounded/' + s[0].lat() + '/'+ s[0].lng() + '/'+ s[1].lat()  + '/'+ s[1].lng() + '/';
+    divs=[];
+    jQuery.get(s, function(data) {
+      jQuery('#result-query-users').html(' <div class="page-header"><h3>Users on this region </h3></div>');
+      jQuery.each(data, function(index, obj) { jQuery('#result-query-users').append('<div style="float:left; padding-left:15px;border:1px solid #888;padding:5px;margin:5px;"><a href="" onclick="zoomuser('+ obj.x +','+ obj.y +');return false;"> '+ obj.name + ' </a></div>');    });  
+    });  
+  });  
+  google.load('visualization', '1.0', {'packages':['corechart']});
+  google.setOnLoadCallback(drawChart);
+
+function zoomuser(x,y){
+  setZoomToLatLng(map, new google.maps.LatLng(x,y), 12);
+}
+
+function drawChart() {
+    var data_fw = new google.visualization.DataTable();
+    data_fw.addColumn('string', 'Python frameworks');
+    data_fw.addColumn('number', '#People');
+    data_fw.addRows(frameworks_count);
+    
+    var data_gd = new google.visualization.DataTable();
+    data_gd.addColumn('string', 'Users by gender');
+    data_gd.addColumn('number', '#Gender');
+    data_gd.addRows(gender_counts);
+        
+    var options = {'title':'Python Frameworks users', 'width':400,'height':300};
+    var chart_fw = new google.visualization.BarChart(document.getElementById('chart_fw'));
+    chart_fw.draw(data_fw, options);
+    
+    var options = {'title':'Users by Gender', 'width':400,'height':300};
+    var chart_gd = new google.visualization.PieChart(document.getElementById('chart_gd'));
+    chart_gd.draw(data_gd, options);
+
+}
+</script>
+{% endblock %}

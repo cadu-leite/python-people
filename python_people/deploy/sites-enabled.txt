@@ -1,0 +1,31 @@
+<VirtualHost *>  
+        ServerName pythonpeople.znc.com.br
+        ErrorLog /var/log/apache2/python_people-error.log
+        CustomLog /var/log/apache2/python_people-access.log common
+
+        WSGIDaemonProcess python-path=/usr/local/venvs/python_people/lib/python2.5/site-packages
+                          
+        WSGIScriptAlias / /usr/local/django_sites/python_people/deploy/slice.wsgi
+
+        <Directory /usr/local/django_sites/python_people/deploy>
+                Order deny,allow
+                Allow from all
+        </Directory>
+
+
+        Alias /media "/usr/local/django_sites/python_people/media"
+        <Location "/site_media">
+                SetHandler None
+                Order deny,allow
+                Allow from all
+        </Location>
+
+        Alias /static "/usr/local/django_sites/python_people/staticbuild"
+        <Location "/static">
+                SetHandler None
+                Order deny,allow
+                Allow from all
+        </Location>
+
+
+</VirtualHost>
