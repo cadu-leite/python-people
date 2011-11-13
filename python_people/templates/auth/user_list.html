@@ -1,24 +1,40 @@
 {% extends "base.html" %}
 {% load gravatar %}
-{% block css %}
-{% endblock %}
-{% block js %} 
-{{ form.media }}
-<script type="text/javascript">
-    
-</script>
-{% endblock %}
 {% block pagetitle %}  Python Users {% endblock %}
-
 {% block content %}
 <section id="user-list">
-     {% for obj in object_list %}
-     <div class="user-item">
-         <a href="{% url python-user-profile obj.id %}"> {% gravatar obj.username 50 %} </a>
-         <div class="user-name"><a href="{% url python-user-profile obj.id %}">  {{ obj.get_profile.name|default_if_none:"- -" }}  </a>  <span class="discreet">Location: <b>{{ obj.get_profile.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.get_profile.country|default_if_none:" - -" }}</b></span></div>
-         <div class="user-bio"> <ul>{% for pf in  obj.get_profile.python_frameworks.all %} <li>{{ pf.name }}</li>  {% endfor %}<ul></div>
+    {% for obj in object_list %}
+    <div class="user-item">
+        <a href="{% url python-user-profile obj.id %}"> {% gravatar obj.username 50 %} </a>
+        <div class="user-name"> 
+            <a href="{% url python-user-profile obj.id %}">  {{ obj.get_profile.name|default_if_none:"- -" }}  </a>   
+            <span class="discreet">Location: <b>{{ obj.get_profile.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.get_profile.country|default_if_none:" - -" }}</b></span> 
+        </div> 
+        <div class="user-bio">  
+            <ul>
+            {% for pf in  obj.get_profile.python_frameworks.all %}  
+                <li>{{ pf.name }}</li>  
+            {% endfor %} 
+            <ul> 
+        </div>
+
      </div> 
     {% endfor %}
 </div>
+
+{% if is_paginated %} 
+<div class="pagination"> 
+    <ul> 
+        <li class="prev {% if not page_obj.has_previous %}disabled{% endif %}"><a href="?page={{ page_obj.previous_page_number }}">&larr; Previous</a></li> 
+        {% for i in paginator.page_range %} 
+        <li class="{% ifequal i page_obj.number %}active{%endifequal%}"><a href="?page={{ i }}">{{ i }}</a></li> 
+        {% endfor %} 
+
+        <li class="prev {% if not page_obj.has_next %}disabled{% endif %}"><a href="?page={{ page_obj.next_page_number }}">Next &rarr;</a></li> 
+    </ul> 
+</div> 
+{% endif %} 
+
 </section>
 {% endblock %}
+
