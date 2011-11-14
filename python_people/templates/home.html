@@ -43,7 +43,7 @@
         <h3>New Groups</h3>
         <ol>
         {% for pyg in pygs %}
-        <li>{{pyg.name}}  <span class="discreet"> ( {{pyg.date_add|date:"D d M Y"}} ) </span></li>
+        <li><a href="{% url python-group-detail  pyg.id %}">{{pyg.name}}</a><span class="discreet"> ( {{pyg.date_add|date:"D d M Y"}} ) </span></li>
         {% endfor %}
         </ol>
     </div>    
