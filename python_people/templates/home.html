@@ -72,7 +72,7 @@ var gender_counts = {{ gender_count|safe }};
 jQuery(document).ready(function(){
   var points = {{ pjson|safe }};
   var pygs = {{ pygsjson|safe }};
-  jQuery('#address').attr('placeholder','username');
+  jQuery('#address').attr('placeholder','address');
   init_mapa(map, points, pygs);});
   google.maps.event.addListener(map, 'bounds_changed', function() {
     //jQuery("#result-query-users").html("");
