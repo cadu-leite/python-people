@@ -69,17 +69,19 @@ var static_path = "{{ STATIC_URL }}";
 var frameworks_count={{ frameworks_count|safe }}; 
 var gender_counts = {{ gender_count|safe }};
 
+
+
 jQuery(document).ready(function(){
   var points = {{ pjson|safe }};
   var pygs = {{ pygsjson|safe }};
   jQuery('#address').attr('placeholder','address');
   init_mapa(map, points, pygs);});
   google.maps.event.addListener(map, 'bounds_changed', function() {
-    //jQuery("#result-query-users").html("");
-    s = getMapBBox(map);
-    s = 'people/list/bounded/' + s[0].lat() + '/'+ s[0].lng() + '/'+ s[1].lat()  + '/'+ s[1].lng() + '/';
+    
+    bBox = getMapBBox(map);
+    bBox = 'people/list/bounded/' + bBox[0].lat() + '/'+ bBox[0].lng() + '/'+ bBox[1].lat()  + '/'+ bBox[1].lng() + '/';
     divs=[];
-    jQuery.get(s, function(data) {
+    jQuery.get(bBox, function(data) {
       if(data.length){
         jQuery('#result-query-users').html('<div class="page-header"><h3>Users on this region </h3></div><div class="row"><div class="span16"></div></div>');
         jQuery.each(data, function(index, obj) { 
@@ -92,10 +94,9 @@ jQuery(document).ready(function(){
   });  
   google.load('visualization', '1.0', {'packages':['corechart']});
   google.setOnLoadCallback(drawChart);
+  setUserLocation(map);
 
-function zoomuser(x,y){
-  setZoomToLatLng(map, new google.maps.LatLng(x,y), 12);
-}
+function zoomuser(x,y){setZoomToLatLng(map, new google.maps.LatLng(x,y), 12);}
 
 function drawChart() {
     var data_fw = new google.visualization.DataTable();
@@ -115,7 +116,7 @@ function drawChart() {
     var options = {'title':'Users by Gender', 'width':400,'height':300};
     var chart_gd = new google.visualization.PieChart(document.getElementById('chart_gd'));
     chart_gd.draw(data_gd, options);
-
 }
+
 </script>
 {% endblock %}

@@ -125,3 +125,41 @@ function getMapBBox(map){
   
   return [sw, ne];
 }
+
+function setUserLocation(){
+  if(navigator.geolocation) {
+    browserSupportFlag = true;
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      setZoomToLatLng(map, initialLocation, 8);
+    }, function() {
+      handleNoGeolocation(browserSupportFlag);
+    });
+  // Try Google Gears Geolocation
+  } else if (google.gears) {
+    browserSupportFlag = true;
+    var geo = google.gears.factory.create('beta.geolocation');
+    geo.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
+      setZoomToLatLng(map, initialLocation, 8);
+    }, function() {
+      handleNoGeoLocation(browserSupportFlag);
+    });
+  // Browser doesn't support Geolocation
+  } else {
+    browserSupportFlag = false;
+    handleNoGeolocation(browserSupportFlag);
+  }
+  
+  function handleNoGeolocation(errorFlag) {
+    if (errorFlag == true) {
+      alert("Geolocation service failed.");
+      initialLocation = newyork;
+    } else {
+      alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+      initialLocation = siberia;
+    }
+    map.setCenter(initialLocation);
+  }
+
+}
