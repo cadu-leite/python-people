@@ -6,11 +6,9 @@ from django.contrib.gis.db import models
 from django.db.models.signals import post_save
 
 
-
 SEXO_CHOICES = (
-    (1, 'Masculino'),
-    (2, 'Feminino'),
-    (3, 'outro'),
+    (1, 'Male'),
+    (2, 'Female'),
 )
 
 
@@ -31,7 +29,7 @@ class PythonFrameWorks(models.Model):
      
 class UserProfile(models.Model):
     """
-    Dados do Perfil do Usuário
+    User Profile data
     """
     user = models.ForeignKey(User, unique=True)
     
@@ -41,7 +39,7 @@ class UserProfile(models.Model):
     point = models.PointField(srid=settings.SRID, blank=True, null=True)
     python_frameworks = models.ManyToManyField(PythonFrameWorks, blank=True, null=True, help_text="Select one or more choices")
     
-    #goolgle address format
+    #google address format
     locality = models.CharField(max_length=60 , blank=True, null=True )
     administrative_area_level_1 = models.CharField(max_length=60 , blank=True, null=True )
     country = models.CharField(max_length=6 , blank=True, null=True )
@@ -57,7 +55,6 @@ class UserProfile(models.Model):
     #bio  = models.TextField( blank=True, null=True , blank=True, null=True )
     
     objects = models.GeoManager()
-    
     
     
     def __unicode__(self):
@@ -80,7 +77,7 @@ class PythonGroup(models.Model):
     mailing_list_url = models.URLField(verify_exists=True, blank=True, null=True )
     
     point = models.PointField( srid=settings.SRID, blank=False, null=False )
-    #goolgle address format
+    #google address format
     locality = models.CharField( max_length=60 , blank=True, null=True )
     administrative_area_level_1 = models.CharField( max_length=60 , blank=True, null=True )
     country = models.CharField( max_length=6 , blank=False, null=False )
@@ -90,6 +87,3 @@ class PythonGroup(models.Model):
     user = models.ForeignKey( User )
     
     objects = models.GeoManager()
-    
-    
-     
