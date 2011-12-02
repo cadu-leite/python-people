@@ -7,7 +7,7 @@
     <div class="user-item">
         <a href="{% url python-user-profile obj.id %}"> {% gravatar obj.username 50 %} </a>
         <div class="user-name"> 
-            <a href="{% url python-user-profile obj.id %}">  {{ obj.get_profile.name|default_if_none:"- -" }}  </a>   
+            <a href="{% url python-user-profile obj.get_profile.id %}">  {{ obj.get_profile.name|default_if_none:"- -" }}  </a>   
             <span class="discreet">Location: <b>{{ obj.get_profile.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.get_profile.country|default_if_none:" - -" }}</b></span> 
         </div> 
         <div class="user-bio">  

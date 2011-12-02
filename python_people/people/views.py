@@ -75,16 +75,16 @@ def user_register(request, pk=None):
     else:
         return UpdateView.as_view(**view_kwargs)(request, pk=pk)
 
-def user_profile_upd(request, id=None):
+def user_profile_upd(request):
     view_kwargs = {
         'model': UserProfile, 
         'form_class': UserProfileForm,
         #'success_url': "/adm/userprofile/%(id)d/",
-        'success_url': "/people/profile/"  + id +  "/",
+        'success_url':  reverse('user-profile',   args=[request.user.get_profile().id] ),
         'template_name': "/people/userprofile_form.html",
     }
     
-    user_profile, created = UserProfile.objects.get_or_create(user_id=id)
+    user_profile, created = UserProfile.objects.get_or_create(user_id=request.user)
     
     if request.method == "POST":
         if user_profile.user.last_login.strftime("%d%m%Y%H%M%S") == user_profile.user.date_joined.strftime("%d%m%Y%H%M%S"):

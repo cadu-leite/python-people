@@ -63,7 +63,7 @@
         <a class="brand" href="{%url home %}"><img src="{{ STATIC_URL }}img/python_logo.png" alt="Python Logo"  style="float:left;"/> &nbsp; Python Developers </a>
         
         <ul class="nav">
-          <li><a href="{% url python-user-list %}">People</a></li>
+          <li><a href="{% url user-profile-list %}">People</a></li>
           <li><a href="{% url python-group-list %}">Groups</a></li>
           <li><a href="{% url about %}">About</a></li>
          </ul>
@@ -71,7 +71,7 @@
         <div class="pull-right">
         {% if user.is_authenticated %}
         <ul class="nav">
-          <li><a href="{% url userprofile-upd user.id %}"> Logged in as <b>{% firstof user.get_profile.name user.username %}</b></a></li>
+          <li><a href="{% url user-profile-form %}"> Logged in as <b>{% firstof user.get_profile.name user.username %}</b></a></li>
           <li><a href="{% url logout %}">logout</a></li>  
         </ul>
         {% else %}

@@ -5,9 +5,9 @@
 <section id="user-list">
     {% for obj in object_list %}
     <div class="user-item">
-        <a href="{% url python-user-profile obj.id %}"> {% gravatar obj.user.username 50 %} </a>
+        <a href="{% url user-profile obj.id %}"> {% gravatar obj.user.username 50 %} </a>
         <div class="user-name"> 
-            <a href="{% url python-user-profile obj.id %}">  {{ obj.name|default_if_none:"- -" }}  </a>   
+            <a href="{% url user-profile obj.id %}">  {{ obj.name|default_if_none:"- -" }}  </a>   
             <span class="discreet">Location: <b>{{ obj.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.country|default_if_none:" - -" }}</b></span> 
         </div> 
         <div class="user-bio">  
