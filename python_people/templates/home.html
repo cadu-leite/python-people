@@ -35,7 +35,7 @@
         <h3>New Developers / Users</h3>
         <ol>
         {% for user in users %}
-        <li><a href="{% url user-profile  user.id %}">{{user.get_profile.name}}</a>  <span class="discreet"> ( {{user.date_joined|date:"D d M Y"}} ) </span></li>
+        <li><a href="{% url user-profile  user.get_profile.id %}">{{user.get_profile.name}}</a>  <span class="discreet"> ( {{user.date_joined|date:"D d M Y"}} ) </span></li>
         {% endfor %}
         </ol>
     </div>
