@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^profile/(?P<id>\d+)/$', user_profile_upd, name='userprofile-upd'),
 
     url(r'^user/profile/(?P<pk>\d+)$', DetailView.as_view(model=User) , name="python-user-profile"),
-    url(r'^user/list/$', ListView.as_view(queryset=UserProfile.objects.order_by("name"), paginate_by=20) , name="python-user-list"),
+    url(r'^user/list/$', ListView.as_view(queryset=UserProfile.objects.order_by("name"), template_name='people/userprofile_list.html',paginate_by=15) , name="python-user-list"),
 
     url(r'^list/bounded/(-?\d+\.\d+)/(-?\d+\.\d+)/(-?\d+\.\d+)/(-?\d+\.\d+)/$', python_users_bounded , name="python-user-list"),
     url(r'^python_group/list/$', ListView.as_view(model=PythonGroup), name='python-group-list'),
