@@ -53,6 +53,7 @@ def points(request):
 def home(request):
     pus = UserProfile.objects.filter(~Q(point=None))
     pygs = PythonGroup.objects.filter(~Q(point=None))
+    pygs = pygs.order_by('-date_add')[:10]
     users= User.objects.all().order_by('-date_joined')[:10]
     #str_json = ups.geojson().values('user_id','name', 'gender','point')
     dpyu = [ { 'user_id':pu.user_id, 'name':pu.name, 'gender':pu.gender, 'x':pu.point.x, 'y': pu.point.y } for pu in pus ]
