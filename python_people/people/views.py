@@ -97,9 +97,10 @@ def user_profile_upd(request):
 
 def python_users_bounded(request, *args):
     
-    pus = UserProfile.objects.filter(point__contained = Polygon.from_bbox(args))  
-    pus.filter( ~Q(point=None))
-    dpyu = [{ 'name':pu.name, 'gender':pu.gender, 'x':pu.point.x, 'y': pu.point.y, 'user_id':pu.user_id } for pu in pus ]
+    pyus = UserProfile.objects.filter(point__contained = Polygon.from_bbox(args)).order_by('name')
+    pyus.filter( ~Q(point=None))
+    
+    dpyu = [{ 'name':pyu.name, 'gender':pyu.gender, 'x':pyu.point.x, 'y': pyu.point.y, 'user_id':pyu.user_id } for pyu in pyus ]
     return HttpResponse(json.dumps(dpyu), 'json')
     
 
