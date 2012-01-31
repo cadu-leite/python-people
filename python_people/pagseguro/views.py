@@ -41,7 +41,7 @@ def pagseguro_transaction_code_request():
     '''
 
     PAYMENT_DATA = [("email", "caduado@gmail.com"),
-        ("token", "EDC5CBC6C7BB4D4A8AEFFAC4FD5C6718"),
+        ("token", "PAGSEGURO_API_TOKEN"),
         ("currency", "BRL"),
         ("itemId1", "0001" ),
         ("itemDescription1", "Anuidade APYB"),
@@ -92,6 +92,6 @@ def checkout(request):
 
 def checkout_return(request):
     print request
-    
+
     return  render(request, '/pagseguro/return.html', {'retorno':retorno})
 
