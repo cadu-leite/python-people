@@ -10,6 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'people.views.home', name='home'),
     url(r'^people/', include('people.urls')),
+    url(r'^pagseguro/', include('pagseguro.urls')),
     #url(r'^feedback/', include('djangovoice.urls')),
     url(r'^comments/', include('django.contrib.comments.urls')),
 

@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'gravatar',
     #'djangovoice',
     'people',
+    'pagseguro',
 )
 AUTH_PROFILE_MODULE  = 'people.UserProfile'
 
