@@ -6,7 +6,8 @@ import urllib
 import urllib2
 from xml.dom.minidom import parseString
 
-from pagseguro.settings import *
+#from pagseguro.settings import *
+from django.conf import settings
 
 def pagseguro_transaction_code_request():
     '''
@@ -41,7 +42,7 @@ def pagseguro_transaction_code_request():
     '''
 
     PAYMENT_DATA = [("email", "caduado@gmail.com"),
-        ("token", "PAGSEGURO_API_TOKEN"),
+        ("token", settings.PAGSEGURO_API_TOKEN),
         ("currency", "BRL"),
         ("itemId1", "0001" ),
         ("itemDescription1", "Anuidade APYB"),
@@ -55,7 +56,7 @@ def pagseguro_transaction_code_request():
 
     encoded_data=urllib.urlencode(PAYMENT_DATA)
 
-    req=urllib2.Request(PAGSEGURO_API_URL, encoded_data)
+    req=urllib2.Request(settings.PAGSEGURO_API_URL, encoded_data)
     req.add_header("Content-type", "application/x-www-form-urlencoded")
     #retorno=urllib2.urlopen(req).read()
     
