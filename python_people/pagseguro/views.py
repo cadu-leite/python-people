@@ -62,7 +62,7 @@ def pagseguro_transaction_code_request():
     
     try:
         retorno=urllib2.urlopen(req)
-    except URLError, e:
+    except urllib2.URLError, e:
         if hasattr(e, 'reason'):
             print 'We failed to reach a server.'
             print 'Reason: ', e.reason
