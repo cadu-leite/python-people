@@ -51,7 +51,7 @@ def pagseguro_transaction_code_request():
         ("itemWeight1", "0"),
         ("reference", "1" ),
         # docs: https://pagseguro.uol.com.br/integracao/pagina-de-redirecionamento.jhtml
-        ("redirectURL","http://www.pythonpeople.znc.com.br/pagamento/ret_checkout"), 
+        ("redirectURL","http://www.pythonpeople.znc.com.br/pagseguro/ret_checkout"), 
         ]
 
     encoded_data=urllib.urlencode(PAYMENT_DATA)
@@ -92,6 +92,11 @@ def checkout(request):
     return HttpResponseRedirect('https://pagseguro.uol.com.br/v2/checkout/payment.html?code=%s'%(code))
 
 def checkout_return(request):
+    '''
+    retorno automatico apos a geracao do boleto
+    http://www.pythonpeople.znc.com.br/pagamento/ret_checkout?trans_code=xxxxxxxx-EA29-416B-A6C9-FC6588E7AC8C
+    '''
+
     print request
 
     return  render(request, '/pagseguro/return.html', {'retorno':retorno})
