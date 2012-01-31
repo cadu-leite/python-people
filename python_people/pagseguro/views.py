@@ -6,7 +6,7 @@ import urllib
 import urllib2
 from xml.dom.minidom import parseString
 
-from payment.settings import *
+from pagseguro.settings import *
 
 def pagseguro_transaction_code_request():
     '''
