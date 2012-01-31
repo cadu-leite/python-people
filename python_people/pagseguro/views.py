@@ -46,7 +46,7 @@ def pagseguro_transaction_code_request():
         ("currency", "BRL"),
         ("itemId1", "0001" ),
         ("itemDescription1", "Anuidade APYB"),
-        ("itemAmount1", "10.00"),
+        ("itemAmount1", "5.00"),
         ("itemQuantity1", "1"),
         ("itemWeight1", "0"),
         ("reference", "1" ),
