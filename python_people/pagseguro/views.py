@@ -51,7 +51,7 @@ def pagseguro_transaction_code_request():
         ("itemWeight1", "0"),
         ("reference", "1" ),
         # docs: https://pagseguro.uol.com.br/integracao/pagina-de-redirecionamento.jhtml
-        ("redirectURL","http://www.pythonpeople.znc.com.br/pagseguro/ret_checkout"), 
+        ("redirectURL","http://pythonpeople.znc.com.br/pagseguro/ret_checkout"), 
                         
         ]
 
