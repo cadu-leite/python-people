@@ -61,16 +61,18 @@ def home(request):
     
     return render(request,'home.html', {'pjson':json.dumps(dpyu), 'pygsjson':json.dumps(dpygs), 'users':users,'pygs':pygs[:10], 'gender_count':gender_count(), 'frameworks_count': json.dumps(frameworks_count()) })
 
-    
+
+        
+
 def user_register(request, pk=None):
     view_kwargs = {
         'model': User, 
         'form_class': UserRegisterForm,
         'template_name': "people/register_form.html",
     }
-    
+
     if pk is None:
-        view_kwargs['success_url'] = "/people/profile/%(id)d/"
+        view_kwargs['success_url'] = "/login/"
         return CreateView.as_view(**view_kwargs)(request)
     else:
         return UpdateView.as_view(**view_kwargs)(request, pk=pk)
