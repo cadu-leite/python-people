@@ -36,19 +36,15 @@ def gender_count():
 def frameworks_count():
     q = list( PythonFrameWorks.objects.values().annotate( Count('userprofile') ) )
     l = [];    d = {}
-    
     l = [[i['name'],i['userprofile__count']] for i in q ]
-    #for i in q:
-    #    d['data']=i['userprofile__count']
-    #    d['label']=i['name']
-    #    l.append(d.copy())
+
     return ( l)
      
 
 def points(request):
     points = UserProfile.objects.kml()
     return render_to_kml("placemarks.kml", {'points' : points})
-
+    
  
 def home(request):
     pus = UserProfile.objects.filter(~Q(point=None))
@@ -56,13 +52,16 @@ def home(request):
     pygs = pygs.order_by('-date_add')[:10]
     users= User.objects.all().order_by('-date_joined')[:10]
     #str_json = ups.geojson().values('user_id','name', 'gender','point')
-    dpyu = [ { 'user_id':pu.user_id, 'name':pu.name, 'gender':pu.gender, 'x':pu.point.x, 'y': pu.point.y } for pu in pus ]
+    dpyu = [ { 'user_id':pu.id, 'name':pu.name, 'gender':pu.gender, 'x':pu.point.x, 'y': pu.point.y } for pu in pus ]
     dpygs = [ { 'pyg_id':pyg.id, 'name':pyg.name, 'description':pyg.description, 'x':pyg.point.x, 'y': pyg.point.y } for pyg in pygs ]
     
-    return render(request,'home.html', {'pjson':json.dumps(dpyu), 'pygsjson':json.dumps(dpygs), 'users':users,'pygs':pygs[:10], 'gender_count':gender_count(), 'frameworks_count': json.dumps(frameworks_count()) })
-
-
-        
+    return render(request,'home.html', {
+        'pjson':json.dumps(dpyu), 
+        'pygsjson':json.dumps(dpygs), 
+        'users':users,
+        'pygs':pygs[:10], 
+        'gender_count':gender_count(), 
+        'frameworks_count': json.dumps(frameworks_count()) })
 
 def user_register(request, pk=None):
     view_kwargs = {

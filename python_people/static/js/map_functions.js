@@ -23,8 +23,6 @@ function init_mapa(map, points, pygs){
   };
   
 
-  
-  
   //include Python User Markers
   for (var i = 0; i < points.length; i++) {
     var point = points[i];
@@ -50,7 +48,7 @@ function init_mapa(map, points, pygs){
       icon: image,
       shadow: shadow,
       shape: shape,
-      html: point.name + "</br> <a href=/people/user/profile/" + point.user_id + ">user profile</a>"
+      html: point.name + "</br> <a href=/people/profile/" + point.user_id + ">user profile</a>"
     });
     
     google.maps.event.addListener(marker, 'click', function(){
