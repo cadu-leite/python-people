@@ -63,16 +63,25 @@ def home(request):
         'gender_count':gender_count(), 
         'frameworks_count': json.dumps(frameworks_count()) })
 
+class CreateWMsgView(CreateView):
+    message=u''
+    message_level = messages.INFO
+    def form_valid(self, form):
+        messages.add_message(self.request,self.message_level, self.message)
+        return super(CreateWMsgView, self).form_valid(form)
+
 def user_register(request, pk=None):
     view_kwargs = {
         'model': User, 
         'form_class': UserRegisterForm,
         'template_name': "people/register_form.html",
+        'message':u'Your account has been created ! Sig in to fullfill your profile.',
+        'message_level':messages.INFO,
     }
 
     if pk is None:
         view_kwargs['success_url'] = "/login/"
-        return CreateView.as_view(**view_kwargs)(request)
+        return CreateWMsgView.as_view(**view_kwargs)(request)
     else:
         return UpdateView.as_view(**view_kwargs)(request, pk=pk)
 
