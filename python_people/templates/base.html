@@ -71,7 +71,7 @@
         <div class="pull-right">
         {% if user.is_authenticated %}
         <ul class="nav">
-          <li><a href="{% url user-profile-form %}"> Logged in as <b>{% firstof user.get_profile.name user.username %}</b></a></li>
+          <li><a href="{% url user-profile-form %}"> Logged in as <b>{% firstof user.get_profile.name user.username %} - Update your profile</b></a></li>
           <li><a href="{% url logout %}">logout</a></li>  
         </ul>
         {% else %}
