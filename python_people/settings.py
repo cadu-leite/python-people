@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.markup',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -183,9 +184,7 @@ EMAIL_HOST_USER = 'pythonpeople@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 
-PAGSEGURO_API_URL = "https://ws.pagseguro.uol.com.br/v2/checkout"
-PAGSEGURO_API_RETURN_URL = ""
-PAGSEGURO_API_TOKEN=""
+
 
 SRID = 4326 # see the readme file
 

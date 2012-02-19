@@ -45,7 +45,9 @@ class UserProfile(models.Model):
     country = models.CharField(max_length=6 , blank=True, null=True )
 
     public_email = models.NullBooleanField('Public e-mail address ?', help_text="If 'yes', everyone may see your e-mail adress on your profile page.")
-        
+    
+    bio  = models.TextField()
+
     #occupation = models.ManyToManyField(Occupation) 
     #organization =  models.CharField(max_length=60 , blank=True, null=True )
     #organization_site = models.URLField()

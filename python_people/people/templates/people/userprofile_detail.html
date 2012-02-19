@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+{% load markup %}
 {% block js %} 
+
 {{ form.media }}
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
 <script type="text/javascript"> 
@@ -39,7 +41,8 @@ jQuery(document).ready(function(){
       <dd>{% firstof object.administrative_area_level_1 "--" %} -  {% firstof object.country "--" %}</dd>
       <dt>Python Frameworks </dt>
       <dd>{{ object.python_frameworks.all|join:"," }} </dd>
-     
+      <dt>Bio </dt>
+      <dd>{{ object.bio|markdown}} </dd>
     </dl>
   </div>
   <div class="span5">
