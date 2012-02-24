@@ -67,6 +67,7 @@ def home(request):
         'gender_count':gender_count(), 
         'frameworks_count': json.dumps(frameworks_count()),
         'by_country' :json.dumps(list(people_by_country())),
+        'people_total': User.objects.count(),
         })
 
 class CreateWMsgView(CreateView):
