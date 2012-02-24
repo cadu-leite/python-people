@@ -42,8 +42,7 @@ def frameworks_count():
      
 
 def people_by_country():
-    by_country  = UserProfile.objects.values('country').annotate(qtd = Count('id')).order_by('-qtd')
-    
+    by_country  = UserProfile.objects.values('country').annotate(qtd = Count('id')).order_by('-qtd')[:10]
     l = [[i['country'],i['qtd']] for i in by_country ]
     return (l )
 
