@@ -41,6 +41,11 @@ def frameworks_count():
     return ( l)
      
 
+def people_by_country():
+    by_country  = UserProfile.objects.values('country').annotate(qtd = Count('id'))
+    l = [[i['country'],i['qtd']] for i in by_country ]
+    return (l )
+
 def points(request):
     points = UserProfile.objects.kml()
     return render_to_kml("placemarks.kml", {'points' : points})
@@ -58,10 +63,11 @@ def home(request):
     return render(request,'home.html', {
         'pjson':json.dumps(dpyu), 
         'pygsjson':json.dumps(dpygs), 
-        'users':users,
-        'pygs':pygs[:10], 
+        'users':users,'pygs':pygs[:10], 
         'gender_count':gender_count(), 
-        'frameworks_count': json.dumps(frameworks_count()) })
+        'frameworks_count': json.dumps(frameworks_count()),
+        'by_country' :json.dumps(list(people_by_country())),
+        })
 
 class CreateWMsgView(CreateView):
     message=u''

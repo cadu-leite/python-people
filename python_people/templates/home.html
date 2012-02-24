@@ -53,6 +53,11 @@
       <div id="chart_gd"></div>
     </div>
   </div><!-- /row -->
+  <div class="row">
+      <div class="span-one-third" id="chart_fw"></div>
+      <div class="span-one-third" id="chart_gd"></div>
+      <div class="span-one-third" id="chart_country"></div>
+  </div>
 </section>
 
 {% endblock %}
@@ -68,7 +73,7 @@ var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 var static_path = "{{ STATIC_URL }}";
 var frameworks_count={{ frameworks_count|safe }}; 
 var gender_counts = {{ gender_count|safe }};
-
+var by_country={{ by_country|safe}}; 
 
 
 jQuery(document).ready(function(){
@@ -108,6 +113,11 @@ function drawChart() {
     data_gd.addColumn('string', 'Users by gender');
     data_gd.addColumn('number', '#Gender');
     data_gd.addRows(gender_counts);
+
+    var data_country = new google.visualization.DataTable();
+    data_country.addColumn('string', 'Country');
+    data_country.addColumn('number', '#qtd');
+    data_country.addRows(by_country);
         
     var options = {'title':'Python Frameworks users', 'width':400,'height':300};
     var chart_fw = new google.visualization.BarChart(document.getElementById('chart_fw'));
@@ -116,6 +126,10 @@ function drawChart() {
     var options = {'title':'Users by Gender', 'width':400,'height':300};
     var chart_gd = new google.visualization.PieChart(document.getElementById('chart_gd'));
     chart_gd.draw(data_gd, options);
+
+    var options_co = {'title':'Users by Country', 'width':400,'height':300};
+    var chart_co = new google.visualization.PieChart(document.getElementById('chart_country'));
+    chart_gd.draw(data_country, options);    chart_gd.draw(data_gd, options_co);
 }
 
 </script>
