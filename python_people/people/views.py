@@ -15,7 +15,7 @@ from django.utils import simplejson  as json
 from django.core import serializers
 
 from django.contrib.gis.db.models import *
-from people.forms import UserProfileForm, UserRegisterForm, PythonGroupForm
+from people.forms import UserProfileForm, ProfileSearchForm, UserRegisterForm, PythonGroupForm
 from people.models import UserProfile, PythonFrameWorks, PythonGroup
 
 from django.contrib.gis.geos import Polygon
@@ -157,3 +157,37 @@ def python_group_crud(request, pk=None):
         return PythonGroupCreateView.as_view(**view_kwargs)(request)
     else:
         return UpdateView.as_view(**view_kwargs)(request, pk=pk)
+
+
+class SearchListView(ListView):
+    form_class = None
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchListView, self).get_context_data(**kwargs)
+        context['frm_srch'] = self.get_form()
+        qs_data = context['frm_srch'].data
+        context['query_string'] = ''
+        if qs_data:
+            qs_data.pop('page', '1')
+            context['query_string'] = qs_data.urlencode()
+
+        return context
+
+    def get_queryset(self):
+        if self.form_class is None:
+            return super(SearchListView, self).get_queryset()
+        return self.get_form().get_queryset()
+
+    def get_form(self):
+        #if not hasattr(self, '_inst_form'):
+        #   setattr(self, '_inst_form', self.form_class(self.request.GET.copy() or None))
+        #return self._inst_form
+        return self.form_class(self.request.GET.copy() or None)
+
+
+class ProfileListView(SearchListView):
+    form_class = ProfileSearchForm
+    paginate_by = 20
+
+
+profile_list = ProfileListView.as_view()

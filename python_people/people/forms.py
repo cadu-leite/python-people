@@ -47,3 +47,14 @@ class PythonGroupForm(forms.ModelForm):
                  'date_upd': forms.HiddenInput(),
                  }
 
+
+class ProfileSearchForm(forms.Form):
+    search_text = forms.CharField(required=False)
+
+    def get_queryset(self):
+        object_list = UserProfile.objects.all()
+        if self.is_valid():
+            if self.cleaned_data['search_text']:
+                object_list = object_list.filter(name__icontains=self.cleaned_data['search_text'])
+
+        return object_list

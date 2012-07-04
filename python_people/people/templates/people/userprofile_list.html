@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% load gravatar %}
+{% load bootstrap_tags %}
 {% block pagetitle %}  Python Users {% endblock %}
 {% block content %}
+
+<form class="well form-search">
+{% bootstrap_form frm_srch "inline" %}
+<input type="submit"  class="btn" value="Go">
+</form>
 <section id="user-list">
     {% for obj in object_list %}
     <div class="user-item">
