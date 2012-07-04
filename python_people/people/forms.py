@@ -5,6 +5,8 @@ from django.contrib.gis import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 #from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
+
 from people.models import UserProfile,  PythonGroup
 
 
@@ -56,5 +58,19 @@ class ProfileSearchForm(forms.Form):
         if self.is_valid():
             if self.cleaned_data['search_text']:
                 object_list = object_list.filter(name__icontains=self.cleaned_data['search_text'])
+
+        return object_list
+
+
+class GroupSearchForm(forms.Form):
+    search_text = forms.CharField(required=False)
+
+    def get_queryset(self):
+        object_list = PythonGroup.objects.all()
+        if self.is_valid():
+            if self.cleaned_data['search_text']:
+                search_text = self.cleaned_data['search_text']
+                filter = Q(name__icontains=search_text) | Q(description__icontains=search_text) | Q(locality__icontains=search_text)
+                object_list = object_list.filter(filter)
 
         return object_list

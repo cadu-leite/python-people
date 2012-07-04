@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap_tags %}
 {% block css %}
 {% endblock %}
 {% block js %} 
@@ -9,7 +10,10 @@
  {% block pagetitle %}  Python User Groups{% endblock %}{% block pagesubtitle %}&nbsp;&nbsp;<a class=" btn info " href="{% url python-group-crud %}">Add a new Python User Group </a> {% endblock %}
 
 {% block content %}
-
+<form class="well form-search">
+{% bootstrap_form frm_srch "inline" %}
+<input type="submit"  class="btn" value="Go">
+</form>
 <section id="python-groups">
 
      {% for obj in object_list %}

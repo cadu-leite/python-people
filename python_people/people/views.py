@@ -15,7 +15,7 @@ from django.utils import simplejson  as json
 from django.core import serializers
 
 from django.contrib.gis.db.models import *
-from people.forms import UserProfileForm, ProfileSearchForm, UserRegisterForm, PythonGroupForm
+from people.forms import UserProfileForm, ProfileSearchForm, UserRegisterForm, PythonGroupForm, GroupSearchForm
 from people.models import UserProfile, PythonFrameWorks, PythonGroup
 
 from django.contrib.gis.geos import Polygon
@@ -126,10 +126,6 @@ def python_users_bounded(request, *args):
     return HttpResponse(json.dumps(dpyu), 'json')
 
 
-def python_group_list(request):
-    return redirect(request)
-
-
 class PythonGroupCreateView(CreateView):
     form_class = PythonGroupForm
 
@@ -189,5 +185,12 @@ class ProfileListView(SearchListView):
     form_class = ProfileSearchForm
     paginate_by = 20
 
-
 profile_list = ProfileListView.as_view()
+
+
+class GroupListView(SearchListView):
+    form_class = GroupSearchForm
+    paginate_by = 20
+
+group_list = GroupListView.as_view()
+
