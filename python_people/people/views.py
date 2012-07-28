@@ -102,13 +102,15 @@ def user_register(request, pk=None):
 
 
 def user_profile_crud(request):
-    #profile = request.user.get_profile()
+    python_groups=None
     if request.user.is_authenticated():
 
         profile, created = UserProfile.objects.get_or_create(user=request.user)
         profile.name = profile.name or request.user.first_name
 
         form = UserProfileForm(request.POST or None, instance=profile)
+
+        python_groups = profile.user.pythongroup_set.all()
 
         if request.POST:
             if form.is_valid():
@@ -118,6 +120,33 @@ def user_profile_crud(request):
         messages.add_message(request, messages.INFO, 'You must be logged to update profile.')
     return render(request,
         "people/userprofile_form.html",
+        {'form': form, 
+        'python_groups':python_groups},
+        )
+
+
+def python_group_crud(request, pk=None):
+
+    try:
+        group = PythonGroup.objects.get(pk=pk)
+        if not group.is_group_owner(request.user):
+            group = None
+            messages.add_message(request, messages.INFO, 'You cannot update this python user group.')
+            return redirect(reverse('python-group-list'))
+    except:
+        group = None
+
+    form = PythonGroupForm(request.POST or None, instance=group, user=request.user)
+
+    if request.POST:
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.INFO, 'The group data was sucessfully updated')
+            return redirect(reverse('python-group-detail', args=[group.pk]))
+        else:
+            messages.add_message(request, messages.ERROR, 'There are erros in your request. Please check the messages below.')
+    return render(request,
+        "people/pythongroup_form.html",
         {'form': form},
         )
 
@@ -129,35 +158,6 @@ def python_users_bounded(request, *args):
 
     dpyu = [{'name': pyu.name, 'gender': pyu.gender, 'x': pyu.point.x, 'y': pyu.point.y, 'user_id':pyu.user_id} for pyu in pyus]
     return HttpResponse(json.dumps(dpyu), 'json')
-
-
-class PythonGroupCreateView(CreateView):
-    form_class = PythonGroupForm
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(PythonGroupCreateView, self).dispatch(*args, **kwargs)
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.user = self.request.user
-        obj.save()
-        #return redirect(self.success_url)
-        return redirect(reverse('python-group-detail', args=[obj.pk]))
-
-
-def python_group_crud(request, pk=None):
-    view_kwargs = {
-        'model': PythonGroup,
-        'form_class': PythonGroupForm,
-        'template_name': "people/pythongroup_form.html",
-    }
-
-    if pk is None:
-        view_kwargs['success_url'] = "/pythongroup/list/"
-        return PythonGroupCreateView.as_view(**view_kwargs)(request)
-    else:
-        return UpdateView.as_view(**view_kwargs)(request, pk=pk)
 
 
 class SearchListView(ListView):

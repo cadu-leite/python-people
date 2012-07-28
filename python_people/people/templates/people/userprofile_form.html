@@ -100,15 +100,27 @@ jQuery(document).ready(function(){
 </div>
 
 <div class="span8">
+    <br><br>
+    <h3>You may update these group profiles </h3>
+        <div class="row">
+        <ul>{%  for obj in python_groups %}
+            <li> <a href="{% url python-group-crud obj.id %}"> {{obj.name}} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
    <div class="clearfix">
-    <label>find an address (Cidade, estado ou CEP): </label>
+    <h3>Local </h3>
+    <label>Address: </label>
     <input id="address" type="textbox" value=""> 
     <input type="button" value="Localizar" onclick="codeAddress()">
     </div>
-    <div id="map_canvas" style="width:100%;height:350px;border:5px solid #ccc;margin:auto;top:20px;"></div>
+    <div id="map_canvas" style="width:100%;height:250px;border:5px solid #ccc;margin:auto;top:20px;"></div>
+
 </div>
 </div>
+
 </section> 
+
 {% endif %}
  
 {% endblock %}

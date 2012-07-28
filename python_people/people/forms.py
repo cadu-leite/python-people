@@ -40,6 +40,19 @@ class UserProfileForm(forms.ModelForm):
 
 class PythonGroupForm(forms.ModelForm):
 
+    def __init__(self, *args, **kargs):
+        self.user = kargs.pop('user', None)
+        self.commit = kargs.pop('commit', True)
+        super(PythonGroupForm, self).__init__(*args, **kargs)
+
+    def save(self, *args, **kargs):
+        if self.instance.pk:
+            if not self.instance.is_group_owner(self.user):
+                raise forms.ValidationError("the request user is not the group owner")
+
+        self.instance.user = self.user
+        return super(PythonGroupForm, self).save(*args, **kargs)
+
     class Meta:
         model = PythonGroup
         exclude = ('user')

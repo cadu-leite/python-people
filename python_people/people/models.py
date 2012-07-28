@@ -82,3 +82,7 @@ class PythonGroup(models.Model):
 
     def __unicode__(self):
         return self.user.name
+
+    def is_group_owner(self, user):
+        '''return true if user is the owner or if it has no owner.'''
+        return (self.user == user) or not self.user

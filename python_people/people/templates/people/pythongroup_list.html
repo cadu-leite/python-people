@@ -18,7 +18,15 @@
 
      {% for obj in object_list %}
      <div class="user-item">
-         <div class="user-name"><a href="{% url python-group-detail obj.id %}">  {{ obj.name|default_if_none:"- -" }}  </a>  <span class="discreet">Location: <b>{{ obj.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.country|default_if_none:" - -" }}</b></span></div>
+         <div class="user-name">
+         	<a href="{% url python-group-detail obj.id %}">  {{ obj.name|default_if_none:"- -" }}  </a>  
+         	<span class="discreet">Location: <b>{{ obj.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.country|default_if_none:" - -" }}</b>
+         		{% if user == obj.user %} <a href="{% url python-group-crud obj.id %}" class=" btn "> edit group profile </a> {% endif %}
+         	</span>
+
+
+
+         </div>
      </div> 
 
     {% endfor %}
