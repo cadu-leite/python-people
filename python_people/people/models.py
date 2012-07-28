@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
-
-from django.db.models.signals import post_save
 
 
 SEXO_CHOICES = (
@@ -57,6 +56,9 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
 
+    def get_absolute_url(self):
+        return reverse('user-profile', args=[self.id])
+
 
 class PythonGroup(models.Model):
 
@@ -77,3 +79,6 @@ class PythonGroup(models.Model):
     user = models.ForeignKey(User)
 
     objects = models.GeoManager()
+
+    def __unicode__(self):
+        return self.user.name

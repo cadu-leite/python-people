@@ -23,7 +23,7 @@ jQuery(document).ready(function(){
     });
 </script> 
 {% endblock %}
-{% block pagetitle %}{% firstof object.name "--" %} {% endblock %}{% block pagesubtitle %}  This group was added by  {% firstof object.user.name "--" %} {% endblock %}
+{% block pagetitle %}{% firstof object.name "--" %} {% endblock %}
 {% block content %}
 <div class="row">
 <div class="span5">
@@ -35,8 +35,7 @@ jQuery(document).ready(function(){
         <dd> {% firstof object.site_url "--" %}</dd>
         <dt>Contact </dt>
         <dd> {{ object.contact }} </dd>
-
-        
+        <dt>Group added by:<a href="{{ object.user.get_profile.get_absolute_url }}"> {% firstof object.user.get_profile.name "--" %} </a></dt>
       </dl>
     </div>
 <div class="span5">
