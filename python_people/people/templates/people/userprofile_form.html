@@ -82,10 +82,12 @@ jQuery(document).ready(function(){
 
  {% endblock %}
 {% block content %}
+
+{% if user.is_authenticated %}
 <section>
 <div class="row">
-
 <div class="span8">
+
     <form method="post">
         <fieldset>
             <legend>Profile Form</legend>
@@ -107,5 +109,6 @@ jQuery(document).ready(function(){
 </div>
 </div>
 </section> 
+{% endif %}
  
 {% endblock %}

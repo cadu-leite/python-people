@@ -25,9 +25,9 @@
     <div class="span-one-third">
         <h3>New Developers / Users</h3>
         <ol>
-        {% for user in users %}
+        {% for user in users %}{% if user.get_profile.id %}
         <li><a href="{% url user-profile  user.get_profile.id %}">{{user.get_profile.name}}</a>  <span class="discreet"> ( {{user.date_joined|date:"D d M Y"}} ) </span></li>
-        {% endfor %}
+        {% endif%}{% endfor %}
         </ol>
     </div>
     <div class="span-one-third">

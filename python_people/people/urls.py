@@ -1,9 +1,15 @@
 from django.conf.urls.defaults import patterns, url
-
 from django.views.generic import DetailView
 
-from people.views import  points, user_profile_upd, python_group_crud, python_users_bounded, profile_list, group_list
 from people.models import PythonGroup, UserProfile
+from people.views import  (
+    points,
+    user_profile_crud,
+    python_group_crud,
+    python_users_bounded,
+    profile_list,
+    group_list
+    )
 
 urlpatterns = patterns('',
     url(r'^kml/$', points, name='points'),
@@ -11,7 +17,7 @@ urlpatterns = patterns('',
     #url(r'^profile/list/$', ListView.as_view(queryset=UserProfile.objects.order_by("name"), template_name='people/userprofile_list.html',paginate_by=15) , name="user-profile-list"),
     url(r'^profile/list/$', profile_list, name="user-profile-list"),
     url(r'^profile/(?P<pk>\d+)/$', DetailView.as_view(model=UserProfile), name="user-profile"),
-    url(r'^profile/form/$', user_profile_upd, name="user-profile-form"),
+    url(r'^profile/form/$', user_profile_crud, name="user-profile-form"),
 
     url(r'^python_group/list/$', group_list, name='python-group-list'),
     url(r'^python_group/new/$', python_group_crud, name='python-group-crud'),

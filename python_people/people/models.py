@@ -58,15 +58,6 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-def create_profile(sender, instance=None, **kwargs):
-    if instance is None:
-        return
-    profile, created = UserProfile.objects.get_or_create(user=instance)
-
-
-post_save.connect(create_profile, sender=User)
-
-
 class PythonGroup(models.Model):
 
     name = models.CharField(max_length=60, blank=False, null=False)

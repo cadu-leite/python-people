@@ -75,11 +75,14 @@
           <li><a href="{% url logout %}">logout</a></li>  
         </ul>
         {% else %}
+
         <form  method="post" action="{% url login %}">
           {% csrf_token %} 
+
           {{ user_login_form.username }} {{ user_login_form.password }}
           <button type="submit" class="btn primary">Sign in</button>&nbsp;
           <a  class="btn success" href="{% url user-register %}">Register</a>
+          <a href="{% url socialauth_begin 'twitter' %}" title="logging with Twitter" ><img src="{{ STATIC_URL }}img/twitter-loggingwith.gif" alt="logging with twitter"></a>
         </form>
         {% endif %}
 

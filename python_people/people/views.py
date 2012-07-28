@@ -1,33 +1,29 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from django.shortcuts import render_to_response, get_object_or_404, redirect, render,redirect, HttpResponse
-from django.views.generic import ListView, CreateView, UpdateView
-
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.gis.shortcuts import render_to_kml
-from django.contrib import messages
 
 from django.utils.decorators import method_decorator
 from django.utils import simplejson  as json
-from django.core import serializers
 
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.gis.shortcuts import render_to_kml
 from django.contrib.gis.db.models import *
+from django.contrib.gis.geos import Polygon
+from django.contrib import messages
+
+from django.shortcuts import render, redirect, HttpResponse
+
+from django.views.generic import ListView, CreateView, UpdateView
+
 from people.forms import UserProfileForm, ProfileSearchForm, UserRegisterForm, PythonGroupForm, GroupSearchForm
 from people.models import UserProfile, PythonFrameWorks, PythonGroup
-
-from django.contrib.gis.geos import Polygon
-
-import datetime as DateTime
 
 
 def gender_count():
     profiles = list(UserProfile.objects.values('gender').annotate(Count('gender')))
     l = list()
     opts = {1: 'male', 2: 'female', 3: 'other'}
-    opts_color = {1: '#000897', 2: '#CF0098', 3: '#7C6700'}
     for i in profiles:
         if  (i['gender__count'] != None) and  (i['gender'] != None):
             l.append([opts.get(i['gender']), i['gender__count']])
@@ -73,6 +69,13 @@ def home(request):
         })
 
 
+def login_twitter(request):
+    '''
+    callback view from twitter
+    '''
+    return redirect(reverse('user-profile-form'))
+
+
 class CreateWMsgView(CreateView):
     message = u''
     message_level = messages.INFO
@@ -98,23 +101,25 @@ def user_register(request, pk=None):
         return UpdateView.as_view(**view_kwargs)(request, pk=pk)
 
 
-def user_profile_upd(request):
-    view_kwargs = {
-        'model': UserProfile,
-        'form_class': UserProfileForm,
-        #'success_url': "/adm/userprofile/%(id)d/",
-        'success_url': reverse('user-profile', args=[request.user.get_profile().id]),
-        'template_name': "/people/userprofile_form.html",
-    }
-    user_profile, created = UserProfile.objects.get_or_create(user_id=request.user)
-    if request.method == "POST":
-        if user_profile.user.last_login.strftime("%d%m%Y%H%M%S") == user_profile.user.date_joined.strftime("%d%m%Y%H%M%S"):
-            msg = u"Usuário registrado com sucesso!<br />Efetue o login no site."
-            view_kwargs['success_url'] = settings.LOGIN_URL
-        else:
-            msg = u'Seus dados de perfil foram salvos.'
-        messages.add_message(request, messages.INFO, msg)
-    return UpdateView.as_view(**view_kwargs)(request, pk=user_profile.pk)
+def user_profile_crud(request):
+    #profile = request.user.get_profile()
+    if request.user.is_authenticated():
+
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+        profile.name = profile.name or request.user.first_name
+
+        form = UserProfileForm(request.POST or None, instance=profile)
+
+        if request.POST:
+            if form.is_valid():
+                form.save()
+    else:
+        form = None
+        messages.add_message(request, messages.INFO, 'You must be logged to update profile.')
+    return render(request,
+        "people/userprofile_form.html",
+        {'form': form},
+        )
 
 
 def python_users_bounded(request, *args):

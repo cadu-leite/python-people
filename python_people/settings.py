@@ -11,23 +11,17 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-
-
-#------------------------------------------------
-# create a settings_local.py file, to set YOUR OWN LOCAL DATABASES
-#-----------------------------------------------
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-        'NAME': 'pypeoplegeo',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+## DATABASE settings at settings_local.py
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#        'NAME': 'pypeoplegeo',           # Or path to database file if using sqlite3.
+#        'USER': '',                      # Not used with sqlite3.
+#        'PASSWORD': '',                  # Not used with sqlite3.
+#        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+#        'PORT': '5433',                  # Set to empty string for default. Not used with sqlite3.
+#    }
+#}
 
 
 # Local time zone for this installation. Choices can be found here:
@@ -134,15 +128,17 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.webdesign',
     'django.contrib.comments',
+    'social_auth',
     'bootstrap_tags',
-    
+
     'voting',
     'gravatar',
     #'djangovoice',
     'people',
     'pagseguro',
 )
-AUTH_PROFILE_MODULE  = 'people.UserProfile'
+
+AUTH_PROFILE_MODULE = 'people.UserProfile'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -178,15 +174,43 @@ LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'pythonpeople@gmail.com'
-EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = 587
+LOGIN_ERROR_URL = '/login-error/'
 
+## E-mail settings at settings_local.py
+#EMAIL_USE_TLS = True
+#EMAIL_HOST = ''
+#EMAIL_HOST_USER = ''
+#EMAIL_HOST_PASSWORD = ''
+#EMAIL_PORT = 587
 
+SRID = 4326  # projection type - see the readme file
 
-SRID = 4326 # see the readme file
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SOCIAL_AUTH_DEFAULT_USERNAME = 'python-developer'
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.twitter.TwitterBackend',
+    #'social_auth.backends.facebook.FacebookBackend',
+    #'social_auth.backends.google.GoogleOAuthBackend',
+    #'social_auth.backends.google.GoogleOAuth2Backend',
+    #'social_auth.backends.google.GoogleBackend',
+    #'social_auth.backends.yahoo.YahooBackend',
+    #'social_auth.backends.browserid.BrowserIDBackend',
+    #'social_auth.backends.contrib.linkedin.LinkedinBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+## Do not forget to set key at settings_local.py file 
+#TWITTER_CONSUMER_KEY = ''
+#TWITTER_CONSUMER_SECRET = ''
+#FACEBOOK_APP_ID = ''
+#FACEBOOK_API_SECRET = ''
+#LINKEDIN_CONSUMER_KEY = ''
+#LINKEDIN_CONSUMER_SECRET = ''
+#GOOGLE_CONSUMER_KEY = ''
+#GOOGLE_CONSUMER_SECRET = ''
+#GOOGLE_OAUTH2_CLIENT_ID = ''
+#GOOGLE_OAUTH2_CLIENT_SECRET = ''
 
 try:
     from settings_local import *
