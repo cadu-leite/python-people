@@ -52,6 +52,11 @@
   })();
 
 </script>
+<STYLE TYPE="text/css">
+#top-loogin>button, input, select, textarea, a {
+    vertical-align: top;
+}
+</STYLE>
   </head>
   <body>   
   <!--  <a href="http://github.com/cadu-leite/bootstrap_django_tags">
@@ -76,13 +81,14 @@
         </ul>
         {% else %}
 
-        <form  method="post" action="{% url login %}">
+        <form id="top-login"  method="post" action="{% url login %}">
           {% csrf_token %} 
 
           {{ user_login_form.username }} {{ user_login_form.password }}
-          <button type="submit" class="btn primary">Sign in</button>&nbsp;
-          <a  class="btn success" href="{% url user-register %}">Register</a>
-          <a href="{% url socialauth_begin 'twitter' %}" title="logging with Twitter" ><img src="{{ STATIC_URL }}img/twitter-loggingwith.gif" alt="logging with twitter"></a>
+          <button type="submit" class="btn btn-mini primary" style="height:23px; font-size:12px;">Sign in</button>&nbsp;&nbsp;
+          
+          <a href="{% url socialauth_begin 'twitter' %}" title="Sign in with Twitter" > <img src="{{ STATIC_URL }}img/twitter-loggingwith.gif" alt="Sign in with Twitter "></a>&nbsp;
+          <a  class="" href="{% url user-register %}" style=" padding-top:25px; color:#cccccc;text-decoration:underline;font-size:14px;"> Register</span></a>
         </form>
         {% endif %}
 
@@ -127,6 +133,7 @@
 <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript">
   (function() {
 
