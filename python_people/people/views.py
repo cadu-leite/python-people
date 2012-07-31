@@ -102,7 +102,7 @@ def user_register(request, pk=None):
 
 
 def user_profile_crud(request):
-    python_groups=None
+    python_groups = None
     if request.user.is_authenticated():
 
         profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -120,8 +120,8 @@ def user_profile_crud(request):
         messages.add_message(request, messages.INFO, 'You may sign in to update your profile.')
     return render(request,
         "people/userprofile_form.html",
-        {'form': form, 
-        'python_groups':python_groups},
+        {'form': form,
+        'python_groups': python_groups},
         )
 
 
