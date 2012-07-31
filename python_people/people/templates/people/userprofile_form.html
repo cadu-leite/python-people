@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load bootstrap_tags %}
-{% block js %} 
+{% block js %}
 {{ form.media }}
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/map_functions.min.js"></script> 
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
-<script type="text/javascript"> 
+<script type="text/javascript" src="{{ STATIC_URL }}js/map_functions.min.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
 var geocoder;
 var map;
 var marker=null;
@@ -15,28 +15,28 @@ function init_mapa() {
     var myOptions = {zoom: 4, center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP }
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     marker = new google.maps.Marker({ map: map,position: map.getCenter(), draggable:true});
-    
+
     if (document.getElementById("id_point").value!=''){
         latLng = wktToGoogleLanLng(document.getElementById("id_point").value);
         marker.setPosition(latLng);
         setZoomToLatLng(map, latLng, 15)
     }
-    
+
     google.maps.event.addListener(marker, 'dragend', function(mEvent) {reverseGeo(mEvent.latLng); });
     google.maps.event.addListener(map, 'click', function(mEvent) {reverseGeo(mEvent.latLng);});
 
 };
-                                
+
 function reverseGeo(latLng){
     marker.setPosition(latLng);
     document.getElementById("id_point").value =  "POINT (" +  latLng.lat() + " " + latLng.lng() + ")"
     var html="<ul>"
     geocoder.geocode({latLng: latLng}, function(results, status) {
         //alert(status);
-        if (status == google.maps.GeocoderStatus.OK) { 
+        if (status == google.maps.GeocoderStatus.OK) {
             components = results[0].address_components;
             for (var i = 0; i < components.length; i++) {
-                short_name =  components[i].short_name ; 
+                short_name =  components[i].short_name ;
                 type =  components[i].types[0];
                 long_name =  components[i].long_name;
                 if (document.getElementById("id_"+type)){
@@ -49,7 +49,7 @@ function reverseGeo(latLng){
             document.getElementById('id_country').value = '';
             document.getElementById('id_administrative_area_level_1').value = '';
         }
-    });  
+    });
  };
 
 
@@ -66,19 +66,19 @@ function codeAddress() {
       }
     });
 };
-  
+
 jQuery(document).ready(function(){
     init_mapa();
     jQuery('#id_country').width(50);
-    jQuery('#id_country').attr("readonly", true); 
-    
-    jQuery('#id_administrative_area_level_1').attr("readonly", true); 
-    jQuery('#id_locality').attr("readonly",true); 
+    jQuery('#id_country').attr("readonly", true);
+
+    jQuery('#id_administrative_area_level_1').attr("readonly", true);
+    jQuery('#id_locality').attr("readonly",true);
     jQuery('.input ul').attr("class","inputs-list");
     });
-</script> 
+</script>
 {% endblock %}
-{% block menu %}  
+{% block menu %}
 
  {% endblock %}
 {% block content %}
@@ -101,6 +101,7 @@ jQuery(document).ready(function(){
 
 <div class="span8">
     <br><br>
+    {% if python_groups %}
     <h3>You may update these group profiles </h3>
         <div class="row">
         <ul>{%  for obj in python_groups %}
@@ -108,10 +109,11 @@ jQuery(document).ready(function(){
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
    <div class="clearfix">
     <h3>Local </h3>
     <label>Address: </label>
-    <input id="address" type="textbox" value=""> 
+    <input id="address" type="textbox" value="">
     <input type="button" value="Localizar" onclick="codeAddress()">
     </div>
     <div id="map_canvas" style="width:100%;height:250px;border:5px solid #ccc;margin:auto;top:20px;"></div>
@@ -119,8 +121,8 @@ jQuery(document).ready(function(){
 </div>
 </div>
 
-</section> 
+</section>
 
 {% endif %}
- 
+
 {% endblock %}
