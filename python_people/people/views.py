@@ -117,7 +117,7 @@ def user_profile_crud(request):
                 form.save()
     else:
         form = None
-        messages.add_message(request, messages.INFO, 'You must be logged to update profile.')
+        messages.add_message(request, messages.INFO, 'You may sign in to update your profile.')
     return render(request,
         "people/userprofile_form.html",
         {'form': form, 
