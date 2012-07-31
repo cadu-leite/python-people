@@ -31,7 +31,11 @@ jQuery(document).ready(function(){
         <dt>about </dt>
         <dd>{% firstof object.description "--" %}</dd>
         <dt>site</dt>
-        <dd> {% firstof object.site_url "--" %}</dd>
+        {% if  object.site_url %}
+        <dd> <a href="{{ object.site_url }}">{{ object.site_url }}</a> </dd>
+        {% else %}
+        <dd>No site url founded</dd>
+        {%  endif%}
         <dt>Contact </dt>
         <dd> {{ object.contact }} </dd>
         <dt>Group added by:<a href="{{ object.user.get_profile.get_absolute_url }}"> {% firstof object.user.get_profile.name "--" %} </a></dt>
