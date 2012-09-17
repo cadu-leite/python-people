@@ -44,6 +44,16 @@
       <h3> Registered Users </h3>
       <h1> {{ people_total }} </h1>
       <p>Users without a profile, are not accounted </p>
+      <div class="btn-group">
+  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    Action
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+    <li>vvvvv</li>
+    <li>bbbbb</li>
+  </ul>
+</div>
     </div>
   </div><!-- /row -->
 
@@ -127,9 +137,10 @@ function drawChart() {
 jQuery(document).ready(function(){
   var points = {{ pjson|safe }};
   var pygs = {{ pygsjson|safe }};
+  jQuery('#result-query-users').toggle();
   jQuery('#address').attr('placeholder','address');
   init_mapa(map, points, pygs);
-  jQuery('#result-query-users').toggle();
+  
 });
 </script>
 {% endblock %}
