@@ -44,7 +44,7 @@ class UserProfile(models.Model):
 
     bio = models.TextField()
 
-    #occupation = models.ManyToManyField(Occupation) 
+    #occupation = models.ManyToManyField(Occupation)
     #organization =  models.CharField(max_length=60 , blank=True, null=True )
     #organization_site = models.URLField()
     #blog = models.URLField(verify_exists=True, blank=True, null=True )
@@ -81,7 +81,7 @@ class PythonGroup(models.Model):
     objects = models.GeoManager()
 
     def __unicode__(self):
-        return self.user.name
+        return self.name
 
     def is_group_owner(self, user):
         '''return true if user is the owner or if it has no owner.'''
