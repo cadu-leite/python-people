@@ -35,24 +35,16 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <!--  styles -->
-    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/base-min.css" rel="stylesheet">
-
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-4233082-2']);
-  _gaq.push(['_setDomainName', 'znc.com.br']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+    
+    <link href="{{ STATIC_URL }}bootstraptwitter-2.1.1/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}bootstraptwitter-2.1.1/responsive-min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet">
+{% block css %}
+{% endblock css %}
 <STYLE TYPE="text/css">
+body {
+            padding-top: 40px;
+        }
 #top-loogin>button, input, select, textarea, a {
     vertical-align: top;
 }
@@ -61,41 +53,50 @@
   <body>   
   <!--  <a href="http://github.com/cadu-leite/bootstrap_django_tags">
    <img alt="Fork me on GitHub" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" style="position: absolute; top: 0; right: 0; border: 0; z-index:9000000;"> 
-  </a>-->                                    
-  <div class="topbar" data-scrollspy="scrollspy" >
-    <div class="topbar-inner">
+  </a>-->
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+   <div class="navbar-inner">
       <div class="container">
-        <a class="brand" href="{%url home %}"><img src="{{ STATIC_URL }}img/python_logo.png" alt="Python Logo"  style="float:left;"/> &nbsp; Python Developers </a>
-        
-        <ul class="nav">
-          <li><a href="{% url user-profile-list %}">People</a></li>
-          <li><a href="{% url python-group-list %}">Groups</a></li>
-          <li><a href="{% url about %}">About</a></li>
-         </ul>
-         
-        <div class="pull-right">
-        {% if user.is_authenticated %}
-        <ul class="nav">
-          <li><a href="{% url user-profile-form %}"> Logged in as <b>{% firstof user.get_profile.name user.username %} - Update your profile</b></a></li>
-          <li><a href="{% url logout %}">logout</a></li>  
-        </ul>
-        {% else %}
-
-        <form id="top-login"  method="post" action="{% url login %}">
-          {% csrf_token %} 
-
-          {{ user_login_form.username }} {{ user_login_form.password }}
-          <button type="submit" class="btn btn-mini primary" style="height:23px; font-size:12px;">Sign in</button>&nbsp;&nbsp;
-          
-          <a href="{% url socialauth_begin 'twitter' %}" title="Sign in with Twitter" > <img src="{{ STATIC_URL }}img/twitter-loggingwith.gif" alt="Sign in with Twitter "></a>&nbsp;
-          <a  class="" href="{% url user-register %}" style=" padding-top:25px; color:#cccccc;text-decoration:underline;font-size:14px;"> Register</span></a>
-        </form>
-        {% endif %}
-
-        </div>
+         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         </button>
+         <a class="brand" href="./index.html">
+            <img src="{{ STATIC_URL }}img/python_logo.png" alt="Python Logo"  style="float:left;"/> &nbsp;
+            <span style="color:#ffffff;font-size:22px;">
+               Python People</span>
+         </a>
+         <div class="nav-collapse collapse">
+            <ul class="nav">
+               <li><a href="{% url user-profile-list %}">People</a></li>
+               <li><a href="{% url python-group-list %}">Groups</a></li>
+               <li><a href="{% url survey-new %}">Survey</a></li>
+               <li><a href="{% url about %}">About</a></li>
+               {% if not user.is_authenticated %}
+               <li><a href="{% url user-register %}"> Register</a></li>
+               <li><a href="{% url socialauth_begin 'twitter' %}" title="Sign in with Twitter" >
+                  <img src="{{ STATIC_URL }}img/twitter-loggingwith.gif" alt="Sign in with Twitter "></a>&nbsp;</li>
+               <li>
+               <form id="top-login"  method="post" action="{% url login %}" style="margin:8px 0px 0px 0px;">
+                  {% csrf_token %}{{ user_login_form.username }}&nbsp;{{ user_login_form.password }}
+                  <button id="btn-top-login" type="submit" class="btn btn-mini primary" style="height:23px; font-size:12px;">
+                     Sign in</button>&nbsp;&nbsp;
+               </form>
+               </li>
+               {% else %}
+               <a class="btn btn-mini btn-primary" href="{% url user-profile-form %}"> 
+               <b>{% firstof user.get_profile.name user.username %} - Update your profile</b></a></li>
+               <a  class="btn btn-mini btn-inverse" href="{% url logout %}">logout</a>
+               {% endif %}
+            </ul>
+         </div>
       </div>
-    </div>
-  </div>
+   </div>
+</div>
+
+
   
   {% block header %}
   <div id="spacer" style="width:100%;height:40px;"></div>
@@ -127,6 +128,29 @@
       <p class="pull-right"><a href="#">Back to top</a></p>
     </div>
   </footer>
+<!-- Uservoice js -->
+<script type="text/javascript">
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/dTkjD2X87Lf0BrozrboLw.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-4233082-2']);
+  _gaq.push(['_setDomainName', 'znc.com.br']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </body>
 
 

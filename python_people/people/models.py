@@ -86,3 +86,63 @@ class PythonGroup(models.Model):
     def is_group_owner(self, user):
         '''return true if user is the owner or if it has no owner.'''
         return (self.user == user) or not self.user
+
+
+class Survey(models.Model):
+    choices_degree = (
+        (1, "newbie"), (2, "novice"), (3, "apprentice"),  (4, "expert"), (5, "master")
+        )
+
+    choices_user_type = (
+        (1, 'student'), (2, 'work as a developer'), (3, u'scientist / researcher'), (4, 'Other - (ex: geographer, lawyer ...)')
+        )
+
+    choices_main_context = (
+        (1, "commercial"), (2, "academic / scientific research"), (3, "gov"), (4, "ngos"), (5, "help open source projects")
+        )
+
+    choices_main_environment = (
+        (1, "web apps"), (2, "desktop apps"), (3, "scripts (server automation, small tools, plugins ...)"))
+
+    choices_main_problem = (
+        (1, u"as a glue language (ex: exchange data between applications, services ...)"),
+        (2, u"financial tools"),
+        (3, u"gis tools"),
+        (4, u"graphical tools"),
+        (5, u"IT Infrastructure (ex.:server automation, small tools)"),
+        (6, u"just have fun programming"),
+        (7, u"network tools"),
+        (8, u"plugin"),
+        (9, u"research"),
+        (10, u"testing software"),
+        (11, u"web applications development  - workflow process"),
+        (12, u"web CMS"),
+        (13, u"other"),
+        )
+
+    user = models.ManyToManyField(User)
+    date_add = models.DateTimeField(u"Answers Date", auto_now_add=True)
+
+    when_start = models.DateField(u"when do you start using python", null=True, blank=True)
+    work = models.NullBooleanField(u"do you uses python at your work ?", null=True, blank=True)
+    first = models.NullBooleanField(u"is python your first language ? not you like most, but you use most.", null=True, blank=True)
+    degree = models.IntegerField(u"how much python do you know ? ", choices=choices_degree)
+    why = models.TextField(u"Why python", null=True, blank=True)
+
+    user_type = models.IntegerField(choices=choices_user_type, null=True, blank=True)
+    user_type_description = models.CharField(u"Description", max_length=50, null=True, blank=True)
+
+    context = models.IntegerField(u"main environment", choices=choices_main_context, null=True, blank=True)
+    environment = models.IntegerField(u"main environment", choices=choices_main_environment, null=True, blank=True)
+
+    problem = models.IntegerField(u"main environment", choices=choices_main_problem, null=True, blank=True)
+    problem_description = models.CharField(u"Description", max_length=50, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.date
+
+    def is_survey_owner(self, user):
+        '''return true if user is the owner or if it has no owner.
+            to implement per user object check
+        '''
+        return (self.user == user) or not self.user

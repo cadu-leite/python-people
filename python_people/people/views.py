@@ -16,8 +16,8 @@ from django.shortcuts import render, redirect, HttpResponse
 
 from django.views.generic import ListView, CreateView, UpdateView
 
-from people.forms import UserProfileForm, ProfileSearchForm, UserRegisterForm, PythonGroupForm, GroupSearchForm
-from people.models import UserProfile, PythonFrameWorks, PythonGroup
+from people.forms import UserProfileForm, ProfileSearchForm, UserRegisterForm, PythonGroupForm, GroupSearchForm, SurveySearchForm, SurveyForm
+from people.models import UserProfile, PythonFrameWorks, PythonGroup, Survey
 
 
 def gender_count():
@@ -25,7 +25,7 @@ def gender_count():
     l = list()
     opts = {1: 'male', 2: 'female', 3: 'other'}
     for i in profiles:
-        if  (i['gender__count'] != None) and  (i['gender'] != None):
+        if (i['gender__count'] != None) and (i['gender'] != None):
             l.append([opts.get(i['gender']), i['gender__count']])
     return (l)
 
@@ -198,4 +198,37 @@ class GroupListView(SearchListView):
     paginate_by = 20
 
 group_list = GroupListView.as_view()
+
+
+def survey_crud(request, pk=None):
+
+    try:
+        survey = Survey.objects.get(pk=pk)
+        if not group.is_group_owner(request.user):
+            group = None
+            messages.add_message(request, messages.INFO, 'You cannot update this python user group.')
+            return redirect(reverse('python-group-list'))
+    except:
+        survey = None
+
+    form = SurveyForm(request.POST or None, instance=survey, user=request.user)
+
+    if request.POST:
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.INFO, 'The survey was sucessfully updated')
+            return redirect(reverse('python-survey-detail', args=[group.pk]))
+        else:
+            messages.add_message(request, messages.ERROR, 'There are erros in your request. Please check the messages below.')
+    return render(request,
+        "people/survey_form.html",
+        {'form': form},
+        )
+
+
+class SurveyListView(SearchListView):
+    form_class = SurveySearchForm
+    paginate_by = 20
+
+survey_list = SurveyListView.as_view()
 

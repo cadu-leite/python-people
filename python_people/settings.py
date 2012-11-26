@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'social_auth',
     'bootstrap_tags',
+    'bootstrap_toolkit',
 
     'voting',
     'gravatar',

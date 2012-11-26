@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load bootstrap_toolkit %}
+{% block content %}
+<form class="vertical">
+{% csrf_token %}
+{{ form|as_bootstrap:"vertical" }}
+<button type="submit" class="btn  btn-primary">Submit</button>
+</form>
+{% endblock %}
