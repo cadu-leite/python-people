@@ -36,15 +36,13 @@
     <![endif]-->
     <!--  styles -->
 
-    <link href="{{ STATIC_URL }}bootstraptwitter-2.1.1/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}bootstraptwitter-2.1.1/responsive-min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}bootstrap-2.2.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}bootstrap-2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet">
 {% block css %}
 {% endblock css %}
 <STYLE TYPE="text/css">
-body {
-            padding-top: 40px;
-        }
+
 #top-loogin>button, input, select, textarea, a {
     vertical-align: top;
 }
@@ -54,82 +52,92 @@ body {
   <!--  <a href="http://github.com/cadu-leite/bootstrap_django_tags">
    <img alt="Fork me on GitHub" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" style="position: absolute; top: 0; right: 0; border: 0; z-index:9000000;">
   </a>-->
+{% if not user.is_authenticated %}
+<section id="top-bar">
+  <div class="container ">
+    <div class="pull-right" style="vertical-align:middle;">
+      <form id="top-login-form"  method="post" action="{% url login %}">
+        {% csrf_token %}
+        {{ user_login_form.username }}
+        {{ user_login_form.password }}
+        <button id="btn-top-login" type="submit" class="btn btn-mini primary">Sign in</button>
+      </form>
+       <span style="color:#FFFFFF">&nbsp;&nbsp; or &nbsp;&nbsp;</span>
+      <a href="{% url socialauth_begin 'twitter' %}" title="Sign in with Twitter" >
+                     <img src="{{ STATIC_URL }}img/sign-in-with-twitter-gray.png" alt="Sign in with Twitter "></a>
+    </div>
+  </div>
+</section>
+{% endif %}
 
-<div class="navbar navbar-inverse navbar-fixed-top">
-   <div class="navbar-inner">
-      <div class="container">
-         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         </button>
-         <a class="brand" href="{% url home %}">
-            <img src="{{ STATIC_URL }}img/python_logo.png" alt="Python Logo"  style="float:left;"/> &nbsp;
-            <span style="color:#ffffff;font-size:22px;">
-               Python People</span>
-         </a>
-         <div class="nav-collapse collapse">
-            <ul class="nav">
-               <li><a href="{% url user-profile-list %}">People</a></li>
-               <li><a href="{% url python-group-list %}">Groups</a></li>
-               <li><a href="{% url survey-new %}">Survey</a></li>
-               <li><a href="{% url about %}">About</a></li>
-               {% if not user.is_authenticated %}
-               <li><a href="{% url user-register %}"> Register</a></li>
-               <li><a href="{% url socialauth_begin 'twitter' %}" title="Sign in with Twitter" >
-                  <img src="{{ STATIC_URL }}img/twitter-loggingwith.gif" alt="Sign in with Twitter "></a>&nbsp;</li>
-               <li>
-               <form id="top-login"  method="post" action="{% url login %}" style="margin:8px 0px 0px 0px;">
-                  {% csrf_token %}{{ user_login_form.username }}&nbsp;{{ user_login_form.password }}
-                  <button id="btn-top-login" type="submit" class="btn btn-mini primary" style="height:23px; font-size:12px;">
-                     Sign in</button>&nbsp;&nbsp;
-               </form>
-               </li>
-               {% else %}
-               <a class="btn btn-mini btn-primary" href="{% url user-profile-form %}">
-               <b>{% firstof user.get_profile.name user.username %} - Update your profile</b></a></li>
-               <a  class="btn btn-mini btn-inverse" href="{% url logout %}">logout</a>
-               {% endif %}
-            </ul>
+<header>
+   <div class="container">
+      <div class="navbar navbar-inverse">
+         <div class="navbar-inner">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+            <a class="brand" href="{% url home %}"/>
+              <img src="{{ STATIC_URL }}img/python_logo_circle.png" alt="Python Logo"  style="vertical-align:middle"/>
+               <span>Python</span><span style="color:#777;">People</span>.
+            </a>
+            <div class="nav-collapse collapse">
+               <ul class="nav">
+                  <li><a href="{% url user-profile-list %}">People</a></li>
+                  <li><a href="{% url python-group-list %}">Groups</a></li>
+                  <li><a href="{% url survey-new %}">Survey</a></li>
+                  <li><a href="{% url about %}">About</a></li>
+                  {% if not user.is_authenticated %}
+                  <li><a href="{% url user-register %}"> Register</a></li>
+                  {% else %}
+                  <li class="dropdown">
+                    <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">{% firstof user.get_profile.name user.username %}<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url user-profile-form %}"><b>{% firstof user.get_profile.name user.username %} - Update your profile</b></a></li>
+                      <li><a href="{% url logout %}">logout</a></li>
+                    </ul>
+                  </li>
+                  <a class="btn btn-mini" href="{% url user-profile-form %}"><b>{% firstof user.get_profile.name user.username %} - Update your profile</b></a>
+                  {% endif %}
+               </ul>
+            </div>
          </div>
       </div>
    </div>
-</div>
+</header>
 
-
-
-  {% block header %}
-  <div id="spacer" style="width:100%;height:40px;"></div>
-  {% endblock header %}
-
+<div class="wrapper">
   <div class="container">
-    <div class="content">
+    {% block top_content %}  {% endblock top_content %}
       {% block contenttitle %}
       <div class="page-header">
         <h1>{%  block pagetitle %}{% endblock %}<small>{%  block pagesubtitle %}{% endblock %}</small></h1>
       </div>
 
       {% for message in messages %}
-      <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+      <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}> {{ message }}</div>
       {% endfor %}
 
       {% endblock contenttitle %}
-      <div class="row">
+
         {% block content %}
         {% endblock content %}
-      </div>
-    </div>
-  </div><!-- /container -->
 
-  <footer class="footer">
-    <div class="container">
-      <p class="pull-left"><a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangomade124x25.gif" border="0" alt="Made with Django." title="Made with Django." /></a> Django is a registered trademark of the Django Software Foundation</p>
-      <p class="pull-left"> Website built by Carlos Leite @ <a href="http://www.znc.com.br">ZNC Sistemas </a>. Powered by <a href="http://www.djangoproject.com/">django</a> and  <a href="http://twitter.github.com/ " target="_blank">Bootstrap Twitter</a> </p>
+  </div><!-- /container -->
+</div>
+
+<footer class="footer">
+   <div class="container">
+      <p class="pull-left"><a href="http://www.djangoproject.com/"><img src="http://media.djangoproject. com/img/badges/djangomade124x25.gif" border="0" alt="Made with Django." title="Made with Django." /></a> Django is a registered trademark of the Django Software Foundation</p>
+      <p class="pull-left"> Powered by <a href="http://www.djangoproject.com/">django</a> and  <a href="http://twitter.github.com/ " target="_blank">Bootstrap Twitter</a> </p>
       <p class="pull-right"><a href="#">Back to top</a></p>
-    </div>
-  </footer>
+   </div>
+</footer>
 <!-- Uservoice js -->
 <script type="text/javascript">
+
   var uvOptions = {};
   (function() {
     var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
@@ -154,15 +162,16 @@ body {
 </body>
 
 
-<script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.16.custom.min.js"></script>
-<script type="text/javascript">
-  (function() {
+<!-- <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script> -->
 
-  })();
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+
 </script>
+<script type="text/javascript" src="{{ STATIC_URL }}bootstrap-2.2.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
 <script type="text/javascript">
 
 jQuery( function(){
