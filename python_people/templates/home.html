@@ -1,64 +1,64 @@
 {% extends "base.html" %}
-
-{% block contenttitle %}{% endblock %}
+{% load gravatar %}
 {% block top_content %}
-<div class="jumbotron masthead" id="map_canvas" style="width:100%; height:300px;"></div>
+  <div class="shadow">
+    <div id="map_canvas" class="jumbotron masthead" style="width:100%; height:300px;"> </div>
+  </div>
+
+  <div id="result-query-users"></div>
 {% endblock top_content%}
 {% block content %}
-<div class="row">
-  <div class="page-header" style="margin-top:5px">
-    <g:plusone></g:plusone>
-    <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-url="http://people.python.org.br/" data-via="pythonpeople">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-    <a href="https://twitter.com/pythonpeople" class="twitter-follow-button" data-show-count="false">Follow @pythonpeople</a>
-    <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
 
-  </div>
-</div>
-<section>
-  <a href="#" class="btn " onClick="jQuery('#result-query-users').toggle();return false;"> Show users on map list </a>
-  <div id="result-query-users"></div>
-</section>
 <section id="dashboard">
-  <div class="page-header">
-  </div>
   <div class="row">
-    <div class="span-one-third">
-        <h3>New Developers / Users</h3>
+    <div class="span4">
+        <h3>Last Pythonists</h3>
         <ol>
-        {% for user in users %}{% if user.get_profile.id %}
-        <li><a href="{% url user-profile  user.get_profile.id %}">{{user.get_profile.name}}</a>  <span class="discreet"> ( {{user.date_joined|date:"D d M Y"}} ) </span></li>
-        {% endif%}{% endfor %}
+          {% for user in users %}{% if user.get_profile.id %}
+          <li>
+            <a href="{% url user-profile  user.get_profile.id %}">{% gravatar user.username 25 %}{{user.get_profile.name}}</a>
+            <span class="discreet"> ( {{user.date_joined|date:"D d M Y"}} ) </span>
+          </li>
+          {% endif%}{% endfor %}
         </ol>
     </div>
-    <div class="span-one-third">
-        <h3>New Groups</h3>
-        <ol>
+    <div class="span4">
+      <h3>New Groups</h3>
+      <ol>
         {% for pyg in pygs %}
         <li><a href="{% url python-group-detail  pyg.id %}">{{pyg.name}}</a><span class="discreet"> ( {{pyg.date_add|date:"D d M Y"}} ) </span></li>
         {% endfor %}
-        </ol>
+      </ol>
     </div>
-    <div class="span-one-third">
+    <div class="span4">
       <h3> Registered Users </h3>
       <h1> {{ people_total }} </h1>
-
-
+      <div style="padding-top:5px;">
+        <ul>
+          <li><g:plusone></g:plusone></li>
+          <li>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-url="http://people.python.org.br/" data-via="pythonpeople">Tweet</a>
+            <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+          </li>
+          <li>
+            <a href="https://twitter.com/pythonpeople" class="twitter-follow-button" data-show-count="false">Follow @pythonpeople</a>
+            <script src="//platform.twitter.com/widgets.js" type="text/javascript"></script>
+          </li>
+        </ul>
+      </div>
     </div>
   </div><!-- /row -->
-
 </section>
-  <div class="row">
-    <div class="span-one-third" id="chart_country"></div>
-      <div class="span-one-third" id="chart_fw"></div>
-      <div class="span-one-third" id="chart_gd"></div>
-
-  </div>
+<div class="row">
+  <div class="span-one-third" id="chart_country"></div>
+  <div class="span-one-third" id="chart_fw"></div>
+  <div class="span-one-third" id="chart_gd"></div>
+</div>
 {% endblock %}
 
 {% block js %}
-<script language="javascript" type="text/javascript" src="{{ STATIC_URL }}js/map_functions.min.js"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
+<script language="javascript" type="text/javascript" src="{{ STATIC_URL }}js/map_functions.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
 var latlng = new google.maps.LatLng(-20, -48);
 var myOptions = {zoom: 4,center: latlng, mapTypeId: google.maps.MapTypeId.ROADMAP }
@@ -68,7 +68,11 @@ var frameworks_count={{ frameworks_count|safe }};
 var gender_counts = {{ gender_count|safe }};
 var by_country={{ by_country|safe}};
 
-function get_bounded_users(){
+function getBoundedUsers(){
+  // retrieve user from the map bounded area
+  // and list then inside div#result-query-users
+
+  // if its not visible do nothing
   if (jQuery('#result-query-users').is(":visible")) {
 
     bBox = getMapBBox(map);
@@ -76,7 +80,7 @@ function get_bounded_users(){
     divs=[];
     jQuery.get(bBox, function(data) {
       if(data.length){
-        jQuery('#result-query-users').html('<div class="page-header"><h3>Users on this region </h3></div><div class="row"><div class="span16"></div></div>');
+        jQuery('#result-query-users').html('<div class=""><h3>Users on this region </h3></div><div class="row"><div class="span16"></div></div>');
         jQuery.each(data, function(index, obj) {
           jQuery('#result-query-users .span16').append('<div style="float:left; padding-left:15px;border:1px solid #888;padding:5px;margin:5px;"><a href="" onclick="zoomuser('+ obj.x +','+ obj.y +');return false;"> '+ obj.name + ' </a></div>');
         });
@@ -87,7 +91,11 @@ function get_bounded_users(){
   };
 };
 
-google.maps.event.addListener(map, 'bounds_changed', get_bounded_users);
+
+//google.maps.event.addListener(map, 'bounds_changed', getBoundedUsers);
+// much better idiot!
+google.maps.event.addListener(map, 'dragend', getBoundedUsers);
+google.maps.event.addListener(map, 'zoom_changed', getBoundedUsers);
 google.load('visualization', '1.0', {'packages':['corechart']});
 google.setOnLoadCallback(drawChart);
 setUserLocation(map);
@@ -126,7 +134,7 @@ function drawChart() {
 jQuery(document).ready(function(){
   var points = {{ pjson|safe }};
   var pygs = {{ pygsjson|safe }};
-  jQuery('#result-query-users').toggle();
+  //jQuery('#result-query-users').toggle();
   jQuery('#address').attr('placeholder','address');
   init_mapa(map, points, pygs);
 

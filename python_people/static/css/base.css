@@ -104,14 +104,8 @@ header {
   color: #ddd !important;
   text-decoration: none !important;
   font-size: 28px !important;
-  margin-left: 10px;
   text-shadow: none !important;
   margin-top: 10px;
-}
-
-.brand  img {
-  margin-top: -10px;
-  margin-right: 10px;
 }
 
 .brand span {
@@ -2421,26 +2415,21 @@ form#newsletter input[type=submit] {
 
 }
 
-#top-bar input {font-size:10px;height:13px;background-color:#296999;color:#dddddd;}
-#top-bar #btn-top-login{height:20px;}
-#top-bar input[type="text"][type="password"]{
-    background: none repeat scroll 0 0 #DDDDDD;
-    border: 0px;
-    border-color: transparent;
-    padding: 8px;
-    width: 136px;
-    font-size: 12px;
-    font-weight: bold;
-    vertical-align: top;
-}
-#top-bar input[type="submit"]::-moz-focus-inner {border:0;}
-#top-bar #id_username{width:80px}
-#top-bar #id_password{width:80px}
+#top-bar input {
+  font-size:10px;
+  height:13px;
+  background-color:#296999;
+  color:#ffffff;}
 
-#top-login-form{
-  display: inline;
-  margin:0px 0px 0px 0px;"
-}
+#top-bar #btn-top-login{ height:20px; }
+
+#top-bar input { margin-left:5px; margin-bottom:0px;}
+#top-bar input[type="submit"]::-moz-focus-inner {border:3;}
+#top-bar #id_username{width:80px;}
+#top-bar #id_password{width:80px;}
+
+
+/*Profile form */
 .user-item{float:left;width:500px;height:50px;padding:3px;border-bottom:1px solid #cccccc;margin-top:10px;}
 .user-item img{float:left;width:50px;margin-right:5px;}
 .user-name{float:left;width:400px;}
@@ -2448,5 +2437,41 @@ form#newsletter input[type=submit] {
 .user-bio ul li {display:inline;}
 .user-bio ul {margin-left:5px;}
 
-#map_canvas{border-bottom:5px solid #000000;}
+/* div shadow  */
+.shadow:before, .shadow:after {
+  bottom:14px;
+  content: "";
+  position: absolute;
+  z-index: -1;
+  -ms-transform: rotate(-1deg);
+  -webkit-transform: rotate(-1deg); /* Safari and Chrome */
+  -o-transform: rotate(-1deg); /* Opera */
+  -moz-transform: rotate(-1deg); /* Firefox */
+  box-shadow: 0 15px 5px rgba(0, 0, 0, 0.3);
+  height: 50px;
+  left: 5px;
+  max-width: 50%;
+  width: 50%;
+}
+.shadow:after {
+  -ms-transform: rotate(1deg); /* IE 9 */
+  -webkit-transform: rotate(1deg); /* Safari and Chrome */
+  -o-transform: rotate(1deg); /* Opera */
+  -moz-transform: rotate(1deg); /* Firefox */
+  left: auto;
+  right: 5px;
+}
+
+.shadow {
+  position: relative;
+  margin: 1px solid ;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  padding:7px;
+  background:#fcfcfc;
+  -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,.35);
+     -moz-box-shadow: 0px 1px 1px rgba(0,0,0,.35);
+        box-shadow: 0px 1px 1px rgba(0,0,0,.35);
+}
 
