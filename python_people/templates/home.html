@@ -68,28 +68,7 @@ var frameworks_count={{ frameworks_count|safe }};
 var gender_counts = {{ gender_count|safe }};
 var by_country={{ by_country|safe}};
 
-function getBoundedUsers(){
-  // retrieve user from the map bounded area
-  // and list then inside div#result-query-users
 
-  // if its not visible do nothing
-  if (jQuery('#result-query-users').is(":visible")) {
-
-    bBox = getMapBBox(map);
-    bBox = 'people/list/bounded/' + bBox[0].lat() + '/'+ bBox[0].lng() + '/'+ bBox[1].lat()  + '/'+ bBox[1].lng() + '/';
-    divs=[];
-    jQuery.get(bBox, function(data) {
-      if(data.length){
-        jQuery('#result-query-users').html('<div class=""><h3>Users on this region </h3></div><div class="row"><div class="span16"></div></div>');
-        jQuery.each(data, function(index, obj) {
-          jQuery('#result-query-users .span16').append('<div style="float:left; padding-left:15px;border:1px solid #888;padding:5px;margin:5px;"><a href="" onclick="zoomuser('+ obj.x +','+ obj.y +');return false;"> '+ obj.name + ' </a></div>');
-        });
-      } else {
-        jQuery('#result-query-users').html('');
-      }
-    });
-  };
-};
 
 
 //google.maps.event.addListener(map, 'bounds_changed', getBoundedUsers);
@@ -137,6 +116,7 @@ jQuery(document).ready(function(){
   //jQuery('#result-query-users').toggle();
   jQuery('#address').attr('placeholder','address');
   init_mapa(map, points, pygs);
+  getBoundedUsers();
 
 });
 </script>

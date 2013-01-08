@@ -117,6 +117,7 @@ function init_mapa(map, points, pygs){
   }
 
 function getMapBBox(map){
+  // return  map bound box 2 coords.
   mapBounds = map.getBounds();
   sw = mapBounds.getSouthWest(); //ex.:Q { Na=-33.49176179479448, Oa=-107.3701171875, toString=function(), more...}
   ne = mapBounds.getNorthEast(); //ex.:  Q { Na=-5.250487390446263, Oa=11.3701171875, toString=function(), more...}
@@ -124,25 +125,54 @@ function getMapBBox(map){
   return [sw, ne];
 }
 
+function getBoundedUsers(){
+  // retrieve user from the map bounded area
+  // and list then inside div#result-query-users
+
+  // if its not visible do nothing
+  if (jQuery('#result-query-users').is(":visible")) {
+
+    bBox = getMapBBox(map);
+    bBox = 'people/list/bounded/' + bBox[0].lat() + '/'+ bBox[0].lng() + '/'+ bBox[1].lat()  + '/'+ bBox[1].lng() + '/';
+    divs=[];
+    jQuery.get(bBox, function(data) {
+      if(data.length){
+        jQuery('#result-query-users').html('<div class=""><h3>Users on this region </h3></div><div class="row"><div class="span16"></div></div>');
+        jQuery.each(data, function(index, obj) {
+          jQuery('#result-query-users .span16').append('<div style="float:left; padding-left:15px;border:1px solid #888;padding:5px;margin:5px;"><a href="" onclick="zoomuser('+ obj.x +','+ obj.y +');return false;"> '+ obj.name + ' </a></div>');
+        });
+      } else {
+        jQuery('#result-query-users').html('');
+      }
+    });
+  };
+};
+
+
 function setUserLocation(){
   if(navigator.geolocation) {
     browserSupportFlag = true;
     navigator.geolocation.getCurrentPosition(function(position) {
-      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-      setZoomToLatLng(map, initialLocation, 12);
-    }, function() {
-      handleNoGeolocation(browserSupportFlag);
-    });
+        initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+        setZoomToLatLng(map, initialLocation, 12);
+        },
+        function() {
+          handleNoGeolocation(browserSupportFlag);
+        }
+    );
   // Try Google Gears Geolocation
   } else if (google.gears) {
     browserSupportFlag = true;
     var geo = google.gears.factory.create('beta.geolocation');
-    geo.getCurrentPosition(function(position) {
-      initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
-      setZoomToLatLng(map, initialLocation, 8);
-    }, function() {
-      handleNoGeoLocation(browserSupportFlag);
-    });
+    geo.getCurrentPosition(
+      function(position) {
+        initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
+        setZoomToLatLng(map, initialLocation, 12);
+        },
+        function() {
+          handleNoGeoLocation(browserSupportFlag);
+        }
+    );
   // Browser doesn't support Geolocation
   } else {
     browserSupportFlag = false;
@@ -161,3 +191,4 @@ function setUserLocation(){
   }
 
 }
+
