@@ -41,7 +41,7 @@ def pagseguro_transaction_code_request():
     </errors>
     '''
 
-    PAYMENT_DATA = [("email", "caduado@gmail.com"),
+    PAYMENT_DATA = [("email", "xxxxxxxx@gmail.com"),
         ("token", settings.PAGSEGURO_API_TOKEN),
         ("currency", "BRL"),
         ("itemId1", "0001" ),
