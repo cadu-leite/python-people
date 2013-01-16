@@ -114,6 +114,9 @@ TEMPLATE_DIRS = (
     os.path.join(ROOT_PATH, 'templates'),
 )
 
+#SENTRY
+SENTRY_DSN = 'http://f41fba5058194daab4bec8238d5d476b:11d96a06b78140b78b0e27f7fc86533c@putz.znc.com.br/4'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -137,7 +140,10 @@ INSTALLED_APPS = (
     #'djangovoice',
     'people',
     'pagseguro',
+
+    'raven.contrib.django',  # SENTRY
 )
+
 
 AUTH_PROFILE_MODULE = 'people.UserProfile'
 
@@ -201,7 +207,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-## Do not forget to set key at settings_local.py file 
+## Do not forget to set key at settings_local.py file
 #TWITTER_CONSUMER_KEY = ''
 #TWITTER_CONSUMER_SECRET = ''
 #FACEBOOK_APP_ID = ''
