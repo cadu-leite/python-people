@@ -2,15 +2,15 @@
 {% load bootstrap_tags %}
 {% block css %}
 {% endblock %}
-{% block js %} 
+{% block js %}
 {% endblock %}
-{% block menu %}  
+{% block menu %}
 
  {% endblock %}
  {% block pagetitle %}  Python User Groups{% endblock %}{% block pagesubtitle %}&nbsp;&nbsp;<a class=" btn info " href="{% url python-group-crud %}">Add a new Python User Group </a> {% endblock %}
 
 {% block content %}
-<form class="well form-search">
+<form class="well form-search" method="GET">
 {% bootstrap_form frm_srch "inline" %}
 <input type="submit"  class="btn" value="Go">
 </form>
@@ -19,7 +19,7 @@
      {% for obj in object_list %}
      <div class="user-item">
          <div class="user-name">
-         	<a href="{% url python-group-detail obj.id %}">  {{ obj.name|default_if_none:"- -" }}  </a>  
+         	<a href="{% url python-group-detail obj.id %}">  {{ obj.name|default_if_none:"- -" }}  </a>
          	<span class="discreet">Location: <b>{{ obj.administrative_area_level_1|default_if_none:" - -" }} / {{ obj.country|default_if_none:" - -" }}</b>
          		{% if user == obj.user %} <a href="{% url python-group-crud obj.id %}" class=" btn "> edit group profile </a> {% endif %}
          	</span>
@@ -27,11 +27,11 @@
 
 
          </div>
-     </div> 
+     </div>
 
     {% endfor %}
-        
+
 </section>
 
- 
+
 {% endblock %}
